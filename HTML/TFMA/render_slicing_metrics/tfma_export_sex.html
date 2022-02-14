@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slicing Metrics Sex</title>
+</head>
+<body>
+
+
+<!-- Load require.js. Delete this if your page already loads require.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+<script type="application/vnd.jupyter.widget-state+json">
+{
+  "version_major": 2,
+  "version_minor": 0,
+  "state": {
+    "2a813b29b4fe474c90edd527b8052610": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "75d7239fd6b04dd897adbdad911a3157": {
+      "model_name": "SlicingMetricsModel",
+      "model_module": "tensorflow_model_analysis",
+      "model_module_version": "0.37.0",
+      "state": {
+        "_dom_classes": [],
+        "config": {
+          "weightedExamplesColumn": "example_count"
+        },
+        "data": [
+          {
+            "slice": "sex:Male",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.7871086556169429
+                  },
+                  "loss": {
+                    "doubleValue": 0.7089368104934692
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.7089368104934692
+                  },
+                  "example_count": {
+                    "doubleValue": 10860.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.8316879403314176
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.6609580232589335
+                  },
+                  "precision": {
+                    "doubleValue": 0.6502227880331
+                  },
+                  "recall": {
+                    "doubleValue": 0.6274570024570024
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.2998158379373849
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.31558497884928344
+                  },
+                  "calibration": {
+                    "doubleValue": 1.0525960903879663
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "sex:Female",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.9105331119719609
+                  },
+                  "loss": {
+                    "doubleValue": 0.4375970959663391
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.4375970959663391
+                  },
+                  "example_count": {
+                    "doubleValue": 5421.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.8631139287581265
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.5316023765599369
+                  },
+                  "precision": {
+                    "doubleValue": 0.6052104208416834
+                  },
+                  "recall": {
+                    "doubleValue": 0.511864406779661
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.10883600811658366
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.10370286111203453
+                  },
+                  "calibration": {
+                    "doubleValue": 0.9528359493022698
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "js_events": [],
+        "layout": "IPY_MODEL_2a813b29b4fe474c90edd527b8052610"
+      }
+    }
+  }
+}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "75d7239fd6b04dd897adbdad911a3157"}
+</script>
+
+</body>
+</html>

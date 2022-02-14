@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slicing Metrics Sex Cross Race</title>
+</head>
+<body>
+
+
+<!-- Load require.js. Delete this if your page already loads require.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+<script type="application/vnd.jupyter.widget-state+json">
+{
+  "version_major": 2,
+  "version_minor": 0,
+  "state": {
+    "2a813b29b4fe474c90edd527b8052610": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "75d7239fd6b04dd897adbdad911a3157": {
+      "model_name": "SlicingMetricsModel",
+      "model_module": "tensorflow_model_analysis",
+      "model_module_version": "0.37.0",
+      "state": {
+        "_dom_classes": [],
+        "config": {
+          "weightedExamplesColumn": "example_count"
+        },
+        "data": [
+          {
+            "slice": "sex:Male",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.7871086556169429
+                  },
+                  "loss": {
+                    "doubleValue": 0.7089368104934692
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.7089368104934692
+                  },
+                  "example_count": {
+                    "doubleValue": 10860.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.8316879403314176
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.6609580232589335
+                  },
+                  "precision": {
+                    "doubleValue": 0.6502227880331
+                  },
+                  "recall": {
+                    "doubleValue": 0.6274570024570024
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.2998158379373849
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.31558497884928344
+                  },
+                  "calibration": {
+                    "doubleValue": 1.0525960903879663
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "sex:Female",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.9105331119719609
+                  },
+                  "loss": {
+                    "doubleValue": 0.4375970959663391
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.4375970959663391
+                  },
+                  "example_count": {
+                    "doubleValue": 5421.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.8631139287581265
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.5316023765599369
+                  },
+                  "precision": {
+                    "doubleValue": 0.6052104208416834
+                  },
+                  "recall": {
+                    "doubleValue": 0.511864406779661
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.10883600811658366
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.10370286111203453
+                  },
+                  "calibration": {
+                    "doubleValue": 0.9528359493022698
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "js_events": [],
+        "layout": "IPY_MODEL_2a813b29b4fe474c90edd527b8052610"
+      }
+    },
+    "c19a82acac9e4cd69e65fc1cbb45e701": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "852904888fe64d96b01c1a064d271b6b": {
+      "model_name": "SlicingMetricsModel",
+      "model_module": "tensorflow_model_analysis",
+      "model_module_version": "0.37.0",
+      "state": {
+        "_dom_classes": [],
+        "config": {
+          "weightedExamplesColumn": "example_count"
+        },
+        "data": [
+          {
+            "slice": "race:Black",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.891736066623959
+                  },
+                  "loss": {
+                    "doubleValue": 0.6550063490867615
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.6550063490867615
+                  },
+                  "example_count": {
+                    "doubleValue": 1561.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.8321778816224562
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.4611092003704063
+                  },
+                  "precision": {
+                    "doubleValue": 0.5324675324675324
+                  },
+                  "recall": {
+                    "doubleValue": 0.4581005586592179
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.11467008327994875
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.11207122857710697
+                  },
+                  "calibration": {
+                    "doubleValue": 0.9773362447422568
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race:White",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.8222429370428797
+                  },
+                  "loss": {
+                    "doubleValue": 0.5543096661567688
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.5543096661567688
+                  },
+                  "example_count": {
+                    "doubleValue": 13946.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.86112407457749
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.668873962537694
+                  },
+                  "precision": {
+                    "doubleValue": 0.652672908486862
+                  },
+                  "recall": {
+                    "doubleValue": 0.6191977077363897
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.2502509680195038
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.2608743978860348
+                  },
+                  "calibration": {
+                    "doubleValue": 1.0424511039881492
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race:Asian-Pac-Islander",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.7833333333333333
+                  },
+                  "loss": {
+                    "doubleValue": 2.009284019470215
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 2.009284019470215
+                  },
+                  "example_count": {
+                    "doubleValue": 480.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.7845225455569761
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.5687732085061904
+                  },
+                  "precision": {
+                    "doubleValue": 0.6013986013986014
+                  },
+                  "recall": {
+                    "doubleValue": 0.6466165413533834
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.27708333333333335
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.299593685137416
+                  },
+                  "calibration": {
+                    "doubleValue": 1.0812403674132307
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race:Other",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.8592592592592593
+                  },
+                  "loss": {
+                    "doubleValue": 1.517804741859436
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 1.517804741859436
+                  },
+                  "example_count": {
+                    "doubleValue": 135.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.7554545454545455
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.5229951847145996
+                  },
+                  "precision": {
+                    "doubleValue": 0.7142857142857143
+                  },
+                  "recall": {
+                    "doubleValue": 0.4
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.18518518518518517
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.10367685485565772
+                  },
+                  "calibration": {
+                    "doubleValue": 0.5598550162205518
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race:Amer-Indian-Eskimo",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.8364779874213837
+                  },
+                  "loss": {
+                    "doubleValue": 0.9373579621315002
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.9373579621315002
+                  },
+                  "example_count": {
+                    "doubleValue": 159.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.8139097744360902
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.3375780021063922
+                  },
+                  "precision": {
+                    "doubleValue": 0.3157894736842105
+                  },
+                  "recall": {
+                    "doubleValue": 0.3157894736842105
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.11949685534591195
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.11652324146273021
+                  },
+                  "calibration": {
+                    "doubleValue": 0.9751155469775844
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "js_events": [],
+        "layout": "IPY_MODEL_c19a82acac9e4cd69e65fc1cbb45e701"
+      }
+    },
+    "e6982dd211ef4a93a98fbf356566925f": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "a2d9bd6d48f340b0bb2a58aa113fc494": {
+      "model_name": "SlicingMetricsModel",
+      "model_module": "tensorflow_model_analysis",
+      "model_module_version": "0.37.0",
+      "state": {
+        "_dom_classes": [],
+        "config": {
+          "weightedExamplesColumn": "example_count"
+        },
+        "data": [
+          {
+            "slice": "native-country:Cambodia",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.6666666666666666
+                  },
+                  "loss": {
+                    "doubleValue": 3.5039875507354736
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 3.5039875507354736
+                  },
+                  "example_count": {
+                    "doubleValue": 9.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.6071428571428571
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.36621860432432657
+                  },
+                  "precision": {
+                    "doubleValue": 0.3333333333333333
+                  },
+                  "recall": {
+                    "doubleValue": 0.5
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.2222222222222222
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.34318081062060535
+                  },
+                  "calibration": {
+                    "doubleValue": 1.5443136477927242
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "native-country:Canada",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.6885245901639344
+                  },
+                  "loss": {
+                    "doubleValue": 2.4991304874420166
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 2.4991304874420166
+                  },
+                  "example_count": {
+                    "doubleValue": 61.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.7134009009009008
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.5993927965094319
+                  },
+                  "precision": {
+                    "doubleValue": 0.6666666666666666
+                  },
+                  "recall": {
+                    "doubleValue": 0.4166666666666667
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.39344262295081966
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.2679617345161514
+                  },
+                  "calibration": {
+                    "doubleValue": 0.6810694085618848
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "js_events": [],
+        "layout": "IPY_MODEL_e6982dd211ef4a93a98fbf356566925f"
+      }
+    },
+    "c44b3e90a8054574953c25732144c81b": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "5b5fb7b5372142bfbf96668f16219a3f": {
+      "model_name": "SlicingMetricsModel",
+      "model_module": "tensorflow_model_analysis",
+      "model_module_version": "0.37.0",
+      "state": {
+        "_dom_classes": [],
+        "config": {
+          "weightedExamplesColumn": "example_count"
+        },
+        "data": [
+          {
+            "slice": "race_X_sex:Black_X_Male",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.8378712871287128
+                  },
+                  "loss": {
+                    "doubleValue": 0.8666940927505493
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.8666940927505493
+                  },
+                  "example_count": {
+                    "doubleValue": 808.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.805954724944793
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.45214382343394866
+                  },
+                  "precision": {
+                    "doubleValue": 0.5238095238095238
+                  },
+                  "recall": {
+                    "doubleValue": 0.48175182481751827
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.16955445544554457
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.17770185630118313
+                  },
+                  "calibration": {
+                    "doubleValue": 1.048051824024496
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race_X_sex:White_X_Male",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.7843321828260642
+                  },
+                  "loss": {
+                    "doubleValue": 0.6253467798233032
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.6253467798233032
+                  },
+                  "example_count": {
+                    "doubleValue": 9561.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.8377105938880317
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.6901019396654533
+                  },
+                  "precision": {
+                    "doubleValue": 0.6589012517385258
+                  },
+                  "recall": {
+                    "doubleValue": 0.636760752688172
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.31126451208032635
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.32885246075844843
+                  },
+                  "calibration": {
+                    "doubleValue": 1.056504831085862
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race_X_sex:White_X_Female",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.904903078677309
+                  },
+                  "loss": {
+                    "doubleValue": 0.39942121505737305
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.39942121505737305
+                  },
+                  "example_count": {
+                    "doubleValue": 4385.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.8713716782580639
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.5485002858638061
+                  },
+                  "precision": {
+                    "doubleValue": 0.6114942528735632
+                  },
+                  "recall": {
+                    "doubleValue": 0.5175097276264592
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.11721778791334093
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.11265586672910327
+                  },
+                  "calibration": {
+                    "doubleValue": 0.9610816646052877
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race_X_sex:Asian-Pac-Islander_X_Male",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.7346278317152104
+                  },
+                  "loss": {
+                    "doubleValue": 2.307887077331543
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 2.307887077331543
+                  },
+                  "example_count": {
+                    "doubleValue": 309.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.7614046451374109
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.5997284460851261
+                  },
+                  "precision": {
+                    "doubleValue": 0.6086956521739131
+                  },
+                  "recall": {
+                    "doubleValue": 0.6542056074766355
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.34627831715210355
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.37261989300841325
+                  },
+                  "calibration": {
+                    "doubleValue": 1.0760705321457915
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race_X_sex:Black_X_Female",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.949535192563081
+                  },
+                  "loss": {
+                    "doubleValue": 0.4278567433357239
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.4278567433357239
+                  },
+                  "example_count": {
+                    "doubleValue": 753.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.8102772754671488
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.4423730977704064
+                  },
+                  "precision": {
+                    "doubleValue": 0.5714285714285714
+                  },
+                  "recall": {
+                    "doubleValue": 0.38095238095238093
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.055776892430278883
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.0416468631042603
+                  },
+                  "calibration": {
+                    "doubleValue": 0.7466687599406668
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race_X_sex:Other_X_Male",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.8314606741573034
+                  },
+                  "loss": {
+                    "doubleValue": 1.866335391998291
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 1.866335391998291
+                  },
+                  "example_count": {
+                    "doubleValue": 89.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.7427536231884059
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.5152966143995052
+                  },
+                  "precision": {
+                    "doubleValue": 0.7272727272727273
+                  },
+                  "recall": {
+                    "doubleValue": 0.4
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.2247191011235955
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.11866473739811338
+                  },
+                  "calibration": {
+                    "doubleValue": 0.5280580814216045
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race_X_sex:Amer-Indian-Eskimo_X_Male",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.7634408602150538
+                  },
+                  "loss": {
+                    "doubleValue": 1.5116475820541382
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 1.5116475820541382
+                  },
+                  "example_count": {
+                    "doubleValue": 93.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.7179383116883119
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.2629888303823493
+                  },
+                  "precision": {
+                    "doubleValue": 0.2857142857142857
+                  },
+                  "recall": {
+                    "doubleValue": 0.25
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.17204301075268819
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.14850198421830563
+                  },
+                  "calibration": {
+                    "doubleValue": 0.8631677832689015
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race_X_sex:Asian-Pac-Islander_X_Female",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.8713450292397661
+                  },
+                  "loss": {
+                    "doubleValue": 1.4697027206420898
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 1.4697027206420898
+                  },
+                  "example_count": {
+                    "doubleValue": 171.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.7645888594164456
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.44910495984841126
+                  },
+                  "precision": {
+                    "doubleValue": 0.5714285714285714
+                  },
+                  "recall": {
+                    "doubleValue": 0.6153846153846154
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.15204678362573099
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.1676340463529826
+                  },
+                  "calibration": {
+                    "doubleValue": 1.102516227936924
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race_X_sex:Amer-Indian-Eskimo_X_Female",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.9393939393939394
+                  },
+                  "loss": {
+                    "doubleValue": 0.12813153862953186
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.12813153862953186
+                  },
+                  "example_count": {
+                    "doubleValue": 66.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.9788359788359788
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.7944657602303221
+                  },
+                  "precision": {
+                    "doubleValue": 0.4
+                  },
+                  "recall": {
+                    "doubleValue": 0.6666666666666666
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.045454545454545456
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.07146228576169217
+                  },
+                  "calibration": {
+                    "doubleValue": 1.5721702867572276
+                  }
+                }
+              }
+            }
+          },
+          {
+            "slice": "race_X_sex:Other_X_Female",
+            "metrics": {
+              "": {
+                "": {
+                  "binary_accuracy": {
+                    "doubleValue": 0.9130434782608695
+                  },
+                  "loss": {
+                    "doubleValue": 0.8434736132621765
+                  },
+                  "binary_crossentropy": {
+                    "doubleValue": 0.8434736132621765
+                  },
+                  "example_count": {
+                    "doubleValue": 46.0
+                  },
+                  "auc": {
+                    "doubleValue": 0.7853658536585366
+                  },
+                  "auc_precision_recall": {
+                    "doubleValue": 0.5457689652879125
+                  },
+                  "precision": {
+                    "doubleValue": 0.6666666666666666
+                  },
+                  "recall": {
+                    "doubleValue": 0.4
+                  },
+                  "mean_label": {
+                    "doubleValue": 0.10869565217391304
+                  },
+                  "mean_prediction": {
+                    "doubleValue": 0.07467856037134137
+                  },
+                  "calibration": {
+                    "doubleValue": 0.6870427554163405
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "js_events": [],
+        "layout": "IPY_MODEL_c44b3e90a8054574953c25732144c81b"
+      }
+    }
+  }
+}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "5b5fb7b5372142bfbf96668f16219a3f"}
+</script>
+
+</body>
+</html>
