@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html data-markdown-preview-plus-context="html-export">
+  <head>
+    <meta charset="utf-8" />
+    <title>C4_W2_Lab_3_Latency_Test_Compose</title><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    extensions: ["[a11y]/accessibility-menu.js"],
+    'HTML-CSS': {
+      availableFonts: [],
+      webFont: 'TeX',
+      undefinedFamily: "serif",
+      mtextFontInherit: true,
+    },
+    TeX: {
+  "extensions": [
+    "AMSmath.js",
+    "AMSsymbols.js",
+    "noErrors.js",
+    "noUndefined.js"
+  ],
+  "Macros": {},
+  "equationNumbers": {}
+},
+    showMathMenu: true
+  });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js"></script>
+    <style>.emoji {
+  max-width: 1em !important;
+}
+del {
+  text-decoration: none;
+  position: relative;
+}
+del::after {
+  border-bottom: 1px solid black;
+  content: '';
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+ul.contains-task-list li.task-list-item {
+  position: relative;
+  list-style-type: none;
+}
+ul.contains-task-list li.task-list-item input.task-list-item-checkbox {
+  position: absolute;
+  transform: translateX(-100%);
+  width: 26px;
+}
+span.critic.comment {
+  position: relative;
+}
+span.critic.comment::before {
+  content: '\1f4ac';
+  position: initial;
+}
+span.critic.comment > span {
+  display: none;
+}
+span.critic.comment:hover > span {
+  display: initial;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: 1px solid;
+  border-radius: 5px;
+  max-height: 4em;
+  overflow: auto;
+}
+span.critic.comment:focus > span {
+  display: initial;
+  text-decoration: underline;
+  position: initial;
+  top: auto;
+  left: auto;
+  border: initial;
+  border-radius: initial;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: transparent;
+}
+
+body {
+  overflow: initial !important;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  line-height: 1.6;
+  word-wrap: break-word;
+  padding: 30px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+}
+body > *:first-child {
+  margin-top: 0 !important;
+}
+body > *:last-child {
+  margin-bottom: 0 !important;
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+body .absent {
+  color: #c00;
+}
+body .anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+body .anchor:focus {
+  outline: none;
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  padding-left: 8px;
+  margin-left: -30px;
+  text-decoration: none;
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  display: inline-block;
+}
+body h1 tt,
+body h2 tt,
+body h3 tt,
+body h4 tt,
+body h5 tt,
+body h6 tt,
+body h1 code,
+body h2 code,
+body h3 code,
+body h4 code,
+body h5 code,
+body h6 code {
+  font-size: inherit;
+}
+body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+body h1 .anchor {
+  line-height: 1;
+}
+body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+body h2 .anchor {
+  line-height: 1;
+}
+body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+body h3 .anchor {
+  line-height: 1.2;
+}
+body h4 {
+  font-size: 1.25em;
+}
+body h4 .anchor {
+  line-height: 1.2;
+}
+body h5 {
+  font-size: 1em;
+}
+body h5 .anchor {
+  line-height: 1.1;
+}
+body h6 {
+  font-size: 1em;
+  color: #777;
+}
+body h6 .anchor {
+  line-height: 1.1;
+}
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+body ul,
+body ol {
+  padding-left: 2em;
+}
+body ul.no-list,
+body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+body ul ul,
+body ul ol,
+body ol ol,
+body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+body li > p {
+  margin-top: 16px;
+}
+body dl {
+  padding: 0;
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+body blockquote > :first-child {
+  margin-top: 0;
+}
+body blockquote > :last-child {
+  margin-bottom: 0;
+}
+body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+body table th {
+  font-weight: bold;
+}
+body table th,
+body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body .emoji {
+  max-width: none;
+}
+body span.frame {
+  display: block;
+  overflow: hidden;
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+body span.frame span img {
+  display: block;
+  float: left;
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #333;
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+body span.float-left span {
+  margin: 13px 0 0;
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+body code,
+body tt {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+}
+body code:before,
+body tt:before,
+body code:after,
+body tt:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+body code br,
+body tt br {
+  display: none;
+}
+body del code {
+  text-decoration: inherit;
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+body .highlight {
+  margin-bottom: 16px;
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+body pre {
+  word-wrap: normal;
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+body pre code:before,
+body pre tt:before,
+body pre code:after,
+body pre tt:after {
+  content: normal;
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+span.critic.comment > span {
+  background-color: #fff;
+}
+a {
+  color: #337ab7;
+}
+
+.bracket-matcher .region {
+  border-bottom: 1px dotted lime;
+  position: absolute;
+}
+.line-number.bracket-matcher.bracket-matcher {
+  color: #c5c8c6;
+  background-color: #373b41;
+}
+
+pre.editor-colors {
+  background-color: #1d1f21;
+  color: #c5c8c6;
+}
+pre.editor-colors .wrap-guide {
+  background-color: #4f5256;
+}
+pre.editor-colors .indent-guide {
+  color: #4f5256;
+}
+pre.editor-colors .invisible-character {
+  color: #4f5256;
+}
+pre.editor-colors .gutter {
+  background-color: #1d1f21;
+  color: #969896;
+}
+pre.editor-colors .gutter .line-number {
+  padding: 0 0.25em 0 0.5em;
+  -webkit-font-smoothing: antialiased;
+}
+pre.editor-colors .gutter .line-number.cursor-line {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.cursor-line-no-selection {
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.folded,
+pre.editor-colors .gutter .line-number:after,
+pre.editor-colors .fold-marker:after {
+  color: #969896;
+}
+pre.editor-colors .invisible {
+  color: #c5c8c6;
+}
+pre.editor-colors .cursor {
+  color: #ffffff;
+}
+pre.editor-colors .selection .region {
+  background-color: #373b41;
+}
+pre.editor-colors .bracket-matcher .region {
+  border-color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment .syntax--markup.syntax--link {
+  color: #969896;
+}
+.syntax--entity.syntax--name.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--other.syntax--inherited-class {
+  color: #b5bd68;
+}
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--control {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--operator {
+  color: #c5c8c6;
+}
+.syntax--keyword.syntax--other.syntax--special-method {
+  color: #81a2be;
+}
+.syntax--keyword.syntax--other.syntax--unit {
+  color: #de935f;
+}
+.syntax--storage {
+  color: #b294bb;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--constant.syntax--other.syntax--color {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--other.syntax--symbol {
+  color: #8abeb7;
+}
+.syntax--variable {
+  color: #cc6666;
+}
+.syntax--variable.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--variable.syntax--parameter.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--invalid.syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp {
+  color: #8abeb7;
+}
+.syntax--string.syntax--regexp .syntax--source.syntax--ruby.syntax--embedded {
+  color: #f0c674;
+}
+.syntax--string.syntax--other.syntax--link {
+  color: #cc6666;
+}
+.syntax--punctuation.syntax--definition.syntax--parameters,
+.syntax--punctuation.syntax--definition.syntax--array {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--definition.syntax--heading,
+.syntax--punctuation.syntax--definition.syntax--identity {
+  color: #81a2be;
+}
+.syntax--punctuation.syntax--definition.syntax--bold {
+  color: #f0c674;
+  font-weight: bold;
+}
+.syntax--punctuation.syntax--definition.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--punctuation.syntax--section.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--punctuation.syntax--section.syntax--method,
+.syntax--punctuation.syntax--section.syntax--class,
+.syntax--punctuation.syntax--section.syntax--inner-class {
+  color: #c5c8c6;
+}
+.syntax--support.syntax--class {
+  color: #f0c674;
+}
+.syntax--support.syntax--function {
+  color: #8abeb7;
+}
+.syntax--support.syntax--function.syntax--any-method {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--class,
+.syntax--entity.syntax--name.syntax--type.syntax--class {
+  color: #f0c674;
+}
+.syntax--entity.syntax--name.syntax--section {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--other.syntax--attribute-name {
+  color: #de935f;
+}
+.syntax--entity.syntax--other.syntax--attribute-name.syntax--id {
+  color: #81a2be;
+}
+.syntax--meta.syntax--class {
+  color: #f0c674;
+}
+.syntax--meta.syntax--class.syntax--body {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--link {
+  color: #de935f;
+}
+.syntax--meta.syntax--method-call,
+.syntax--meta.syntax--method {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--require {
+  color: #81a2be;
+}
+.syntax--meta.syntax--selector {
+  color: #b294bb;
+}
+.syntax--meta.syntax--separator {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--tag {
+  color: #c5c8c6;
+}
+.syntax--none {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--heading .syntax--punctuation.syntax--definition.syntax--heading {
+  color: #81a2be;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--quote {
+  color: #de935f;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--source.syntax--gfm .syntax--markup {
+  -webkit-font-smoothing: auto;
+}
+.syntax--source.syntax--gfm .syntax--link .syntax--entity {
+  color: #8abeb7;
+}
+.syntax--source.syntax--cs .syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation.syntax--string {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--constant.syntax--language.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--constant.syntax--language.syntax--json {
+  color: #8abeb7;
+}
+/*
+   This defines styling rules for syntax classes.
+
+   See the naming conventions for a list of syntax classes:
+   https://flight-manual.atom.io/hacking-atom/sections/syntax-naming-conventions
+
+   When styling rules conflict:
+   - The last rule overrides previous rules.
+   - The rule with most classes and pseudo-classes overrides the last rule.
+*/
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--storage {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--type {
+  color: #f0c674;
+}
+.syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--function {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--variable {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--support {
+  color: #cc6666;
+}
+.syntax--entity.syntax--decorator:last-child {
+  color: #81a2be;
+}
+.syntax--entity.syntax--label {
+  text-decoration: underline;
+}
+.syntax--entity.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--entity.syntax--operator {
+  color: #81a2be;
+}
+.syntax--entity.syntax--operator.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--attribute {
+  color: #de935f;
+}
+.syntax--punctuation {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--immutable {
+  color: #b5bd68;
+}
+.syntax--string.syntax--part {
+  color: #8abeb7;
+}
+.syntax--string.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--string.syntax--regexp {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp.syntax--language {
+  color: #b294bb;
+}
+.syntax--string.syntax--regexp.syntax--variable {
+  color: #81a2be;
+}
+.syntax--string.syntax--regexp.syntax--punctuation {
+  color: #a3685a;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--code {
+  color: #8abeb7;
+}
+.syntax--text {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--list.syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--alt {
+  color: #8abeb7;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--deleted .syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--changed .syntax--punctuation {
+  color: #b294bb;
+}
+.syntax--markup.syntax--commented {
+  color: #969896;
+}
+.syntax--markup.syntax--commented .syntax--punctuation {
+  color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment.syntax--caption {
+  color: #9ea09e;
+  font-weight: bold;
+}
+.syntax--comment.syntax--term {
+  color: #a8aaa8;
+}
+.syntax--comment.syntax--punctuation {
+  color: #969896;
+  font-weight: normal;
+}
+.syntax--invalid:not(.syntax--punctuation).syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--tag {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--property {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--variable {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--keyframe {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--constant {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--media {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset.syntax--unit {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--attribute-value {
+  color: #b5bd68;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--wildcard {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--attribute {
+  color: #c5c8c6;
+}
+
+/*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed and saved.
+ *
+ * Add your own CSS or Less to fully customize Atom.
+ * If you are unfamiliar with Less, you can read more about it here:
+ * http://lesscss.org
+ */
+/*
+ * Examples
+ * (To see them, uncomment and save)
+ */
+</style>
+
+  </head>
+  <body>
+    <h1>Week 2 Ungraded Lab: Load testing servers with Docker Compose and Locust</h1>
+<p>Welcome! During this ungraded lab you will be conducting a load test on the servers you coded in a previous ungraded lab (first one of this week). You will compare latency across four servers:</p>
+<ul>
+<li>The server that didn’t support batching</li>
+<li>The one with batching and using:
+<ul>
+<li>batches of 1</li>
+<li>batches of 32</li>
+<li>batches of 64</li>
+</ul>
+</li>
+</ul>
+<p>Technically there are only two servers (the one with and the one without batching) but you will for sake of practicality consider them as separate ones since they will handle different amounts of data.</p>
+<p>You will do this by using <a href="https://locust.io/">Locust</a> which is a great Open Source load testing tool and <a href="https://docs.docker.com/compose/">Docker Compose</a> which allows you to run multiple-container applications.</p>
+<p>You will spin a total of 5 containers, 4 for each one of the servers previously mentioned and 1 that will run Locust so you don’t have to install it. Before going forward, open a terminal window and run the following command to download the Locust image, this will take some minutes so it is better to do it right away:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> pull locustio/locust</span></pre>
+<p>You should also have the images <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">mlepc4w2-ugl:no-batch</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">mlepc4w2-ugl:with-batch</code> which you built during the previous lab. <strong>Before going forward make sure you have these two images as well as the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locustio/locust:latest</code> one</strong>. You can double check using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker images</code> command.</p>
+<p>Open a terminal and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd</code> into the directory that contains the files needed by this lab. Assuming you are on the root of the repo you can use the command <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd course4/week2-ungraded-labs/C4_W2_Lab_3_Latency_Test_Compose</code>.</p>
+<p>Let’s get started!</p>
+<hr>
+<h2>Why and how to use Docker Compose</h2>
+<p>You could manually spin up the 5 containers but you will need to find a way to link them together via a network. This can be achieved using regular Docker commands but it is much easier to accomplish using Docker Compose.</p>
+<p>Instead of running each container in a separate terminal window you can simply define a configuration file in <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">YAML</code> format and use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker-compose up</code> command to run your multi-container application. In case you haven’t worked with <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">YAML</code> files, these are usually for configuration and they work in a similar fashion to Python, by <strong>using indentation to specify scope</strong>.</p>
+<p>Let’s take a look at the beggining of <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker-compose.yml</code> file:</p>
+<pre class="editor-colors lang-yml" style="tab-size: 4;"><span class="syntax--source syntax--yaml"><span class="syntax--entity syntax--name syntax--tag syntax--yaml">version</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--quoted syntax--double syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--string syntax--begin syntax--yaml">"</span>3.9<span class="syntax--punctuation syntax--definition syntax--string syntax--end syntax--yaml">"</span></span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">services</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">no-batch</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">image</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">mlepc4w2-ugl:no-batch</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">links</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--string syntax--unquoted syntax--yaml">locust</span></span></pre>
+<p>The first line specifies the version of Compose format being used. At the time this tutorial is written the latest version is 3.9, so that is the format selected. Notice that latter versions of Compose do not require this to be explicitly stated but it is something quite common so it is worth understanding its meaning.</p>
+<p>After this you will define each one of your <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">services</code> (or containers). You will specify the name of the service (<code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">no-batch</code> in this case) along with the necessary information to run it. In this case, this is the server that does not support batching so a container that uses the image <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">mlepc4w2-ugl:no-batch</code> must be used. Notice the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">links</code> item, this is used to tell Compose that this service will need to communicate with the service named <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locust</code> through the network that Compose will create.</p>
+<p>To better understand this, look at the complete <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker-compose.yml</code> file:</p>
+<pre class="editor-colors lang-yml" style="tab-size: 4;"><span class="syntax--source syntax--yaml"><span class="syntax--entity syntax--name syntax--tag syntax--yaml">version</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--quoted syntax--double syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--string syntax--begin syntax--yaml">"</span>3.9<span class="syntax--punctuation syntax--definition syntax--string syntax--end syntax--yaml">"</span></span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">services</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">no-batch</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">image</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">mlepc4w2-ugl:no-batch</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">links</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--string syntax--unquoted syntax--yaml">locust</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">batch-1</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">image</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">mlepc4w2-ugl:with-batch</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">links</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--string syntax--unquoted syntax--yaml">locust</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">batch-32</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">image</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">mlepc4w2-ugl:with-batch</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">links</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--string syntax--unquoted syntax--yaml">locust</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">batch-64</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">image</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">mlepc4w2-ugl:with-batch</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">links</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--string syntax--unquoted syntax--yaml">locust</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">locust</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">image</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">locustio/locust</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">ports</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--string syntax--quoted syntax--double syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--string syntax--begin syntax--yaml">"</span>8089:8089<span class="syntax--punctuation syntax--definition syntax--string syntax--end syntax--yaml">"</span></span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">volumes</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--string syntax--unquoted syntax--yaml">./:/mnt/locust</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">command</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">-f /mnt/locust/locustfile.py</span></span></pre>
+<p>Each one of the four servers that handle predictions need to be linked to the locust service so that you can perform the load test. Notice that the the servers that support batching have identical information except for the name of the service.</p>
+<p>The locust service has some more stuff going on but at this point you have already seen how they work:</p>
+<ul>
+<li>
+<p>First, this container will have port 8089 mapped to port 8089 in your localhost. This is for you to be able to access the service directly.</p>
+</li>
+<li>
+<p>There is also a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">volume</code>, this is very similar to the bind mounts you saw in previous labs. This allows you to mount files in your local filesystem onto the container, it is often used to persist changes but in this case it is done so you don’t have to create a new image that uses the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locustio/locust</code> one as base and copies the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locustfile.py</code> inside the image.</p>
+</li>
+<li>
+<p>Finally the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">command</code> item is analogous to the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">CMD</code> instruction and it refers to the command that will be run when spinning up the container, in this case the locust server is started to perform the load testing.</p>
+</li>
+</ul>
+<p>Before spinning up this multi-container application, let’s take some time to understand how <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locust</code> works at a high level.</p>
+<h2>Understanding Locust</h2>
+<p>By convention the file that handles the locust logic is named <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locustfile.py</code>. Unlike Dockerfiles, this file is a regular python script. Remember you can take a look at the complete file in this repo.</p>
+<details>
+<summary> <i>locustfile.py</i></summary>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">from</span> locust <span class="syntax--keyword syntax--control">import</span> HttpUser<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> task<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> constant
+
+
+<span class="syntax--storage syntax--type syntax--class">class</span> <span class="syntax--entity syntax--name syntax--type syntax--class">LoadTest</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--entity syntax--other syntax--inherited-class">HttpUser</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>:
+    wait_time <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--entity syntax--name syntax--function syntax--call">constant</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">0</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+    host <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--string syntax--quoted">"http://localhost"</span>
+
+    <span class="syntax--entity syntax--name syntax--function syntax--decorator">@task</span>
+    <span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict_batch_1</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">self</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+        request_body <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span><span class="syntax--string syntax--quoted">"batches"</span>: <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--constant syntax--numeric">1.0</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">13</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+        <span class="syntax--entity syntax--name syntax--variable syntax--self">self</span>.<span class="syntax--variable syntax--other syntax--object syntax--property">client</span>.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+            <span class="syntax--string syntax--quoted">"http://batch-1:80/predict"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">json</span><span class="syntax--keyword syntax--operator">=</span>request_body<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">name</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"batch-1"</span>
+        <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+
+    <span class="syntax--entity syntax--name syntax--function syntax--decorator">@task</span>
+    <span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict_batch_32</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">self</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+        request_body <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span><span class="syntax--string syntax--quoted">"batches"</span>: <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--constant syntax--numeric">1.0</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">13</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">32</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+        <span class="syntax--entity syntax--name syntax--variable syntax--self">self</span>.<span class="syntax--variable syntax--other syntax--object syntax--property">client</span>.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+            <span class="syntax--string syntax--quoted">"http://batch-32:80/predict"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">json</span><span class="syntax--keyword syntax--operator">=</span>request_body<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">name</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"batch-32"</span>
+        <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+
+    <span class="syntax--entity syntax--name syntax--function syntax--decorator">@task</span>
+    <span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict_batch_64</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">self</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+        request_body <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span><span class="syntax--string syntax--quoted">"batches"</span>: <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--constant syntax--numeric">1.0</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">13</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">64</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+        <span class="syntax--entity syntax--name syntax--variable syntax--self">self</span>.<span class="syntax--variable syntax--other syntax--object syntax--property">client</span>.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+            <span class="syntax--string syntax--quoted">"http://batch-64:80/predict"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">json</span><span class="syntax--keyword syntax--operator">=</span>request_body<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">name</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"batch-64"</span>
+        <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+
+    <span class="syntax--entity syntax--name syntax--function syntax--decorator">@task</span>
+    <span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict_no_batch</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">self</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+        request_body <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span>
+            <span class="syntax--string syntax--quoted">"alcohol"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"malic_acid"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"ash"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"alcalinity_of_ash"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"magnesium"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"total_phenols"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"flavanoids"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"nonflavanoid_phenols"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"proanthocyanins"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"color_intensity"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"hue"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"od280_od315_of_diluted_wines"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"proline"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+        <span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+        <span class="syntax--entity syntax--name syntax--variable syntax--self">self</span>.<span class="syntax--variable syntax--other syntax--object syntax--property">client</span>.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+            <span class="syntax--string syntax--quoted">"http://no-batch:80/predict"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">json</span><span class="syntax--keyword syntax--operator">=</span>request_body<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">name</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"0:batch"</span>
+        <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+</span></pre>
+</details>
+<br>
+<p>The way locust works is by simulating users that will constantly send requests to your services. By doing this you can measure things like <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">RPS</code> (requests per second) or the average time each request is taking. <strong>This is great to understand the limitations of your servers and to test if they will work under the circumstances they will be exposed once they are launched into production.</strong></p>
+<p>Using locust is actually quite straightforward. First you need to create a new class that inherits from <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locust.HttpUser</code> and within this class you need to specify a method for every service you want to test. These functions should be decorated with the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locust.task</code> decorator.</p>
+<p>Take a look at how this looks:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--storage syntax--type syntax--class">class</span> <span class="syntax--entity syntax--name syntax--type syntax--class">LoadTest</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--entity syntax--other syntax--inherited-class">HttpUser</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>:
+    wait_time <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--entity syntax--name syntax--function syntax--call">constant</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">0</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+    host <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--string syntax--quoted">"http://localhost"</span>
+
+    <span class="syntax--entity syntax--name syntax--function syntax--decorator">@task</span>
+    <span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict_batch_1</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">self</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+        request_body <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span><span class="syntax--string syntax--quoted">"batches"</span>: <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--constant syntax--numeric">1.0</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">13</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+        <span class="syntax--entity syntax--name syntax--variable syntax--self">self</span>.<span class="syntax--variable syntax--other syntax--object syntax--property">client</span>.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+            <span class="syntax--string syntax--quoted">"http://batch-1:80/predict"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">json</span><span class="syntax--keyword syntax--operator">=</span>request_body<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">name</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"batch-1"</span>
+        <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span></pre>
+<p>Notice the two variables <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">wait_time</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">host</code>, let’s quickly clarify those:</p>
+<ul>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">wait_time</code> tells locust how much time to wait between each request, in this case you want it to send requests as soon as possible to see how the servers perform under extreme conditions. The constant function is actually <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locust.constant</code>.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">host</code> specify the host where the service you are testing is hosted. Locust is usually meant to test several endpoints within the same host, but in this case we are testing four different servers located on four different hosts. In this case <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">host</code> defaults to
+<code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">http://localhost</code> but you will actually specify each host within the task functions so this parameter actually does nothing but it is required by locust so you need to specify some value.</p>
+</li>
+</ul>
+<p>Now let’s understand the task method to test the server that will handle batches of 1 data point. This is a method of the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">LoadTest</code> class so it must have <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">self</code> as a parameter.</p>
+<p>In this case you are not interested in the actual predictions of the server so you will define a generic batch of data containing only 1’s. Use this list of lists (which is what the server expects) to create a dictionary and pass it as <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code> when doing the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">POST</code> request. The request is done by using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">self.client.post</code> function. Notice the URL that is passed to this function, it is <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">http://batch-1:80/predict</code>.</p>
+<p>Remember that all of the servers listen on port <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">80</code> of their respective containers and the model is hosted on the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">/predict</code> endpoint. <strong>Something very important is the hostname used, in this case it is <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">batch-1</code>, which is what you named the service that will handle batches of 1 in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker-compose.yml</code> file.</strong></p>
+<p>The methods to test the other servers are nearly identical to this one, except for the URL used and the data passed to the request. Take a look at the complete <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locustfile.py</code>:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">from</span> locust <span class="syntax--keyword syntax--control">import</span> HttpUser<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> task<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> constant
+
+
+<span class="syntax--storage syntax--type syntax--class">class</span> <span class="syntax--entity syntax--name syntax--type syntax--class">LoadTest</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--entity syntax--other syntax--inherited-class">HttpUser</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>:
+    wait_time <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--entity syntax--name syntax--function syntax--call">constant</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">0</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+    host <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--string syntax--quoted">"http://localhost"</span>
+
+    <span class="syntax--entity syntax--name syntax--function syntax--decorator">@task</span>
+    <span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict_batch_1</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">self</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+        request_body <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span><span class="syntax--string syntax--quoted">"batches"</span>: <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--constant syntax--numeric">1.0</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">13</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+        <span class="syntax--entity syntax--name syntax--variable syntax--self">self</span>.<span class="syntax--variable syntax--other syntax--object syntax--property">client</span>.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+            <span class="syntax--string syntax--quoted">"http://batch-1:80/predict"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">json</span><span class="syntax--keyword syntax--operator">=</span>request_body<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">name</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"batch-1"</span>
+        <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+
+    <span class="syntax--entity syntax--name syntax--function syntax--decorator">@task</span>
+    <span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict_batch_32</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">self</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+        request_body <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span><span class="syntax--string syntax--quoted">"batches"</span>: <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--constant syntax--numeric">1.0</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">13</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">32</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+        <span class="syntax--entity syntax--name syntax--variable syntax--self">self</span>.<span class="syntax--variable syntax--other syntax--object syntax--property">client</span>.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+            <span class="syntax--string syntax--quoted">"http://batch-32:80/predict"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">json</span><span class="syntax--keyword syntax--operator">=</span>request_body<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">name</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"batch-32"</span>
+        <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+
+    <span class="syntax--entity syntax--name syntax--function syntax--decorator">@task</span>
+    <span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict_batch_64</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">self</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+        request_body <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span><span class="syntax--string syntax--quoted">"batches"</span>: <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--constant syntax--numeric">1.0</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">13</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span> <span class="syntax--keyword syntax--control">for</span> i <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> <span class="syntax--support syntax--function syntax--call">range</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--constant syntax--numeric">64</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+        <span class="syntax--entity syntax--name syntax--variable syntax--self">self</span>.<span class="syntax--variable syntax--other syntax--object syntax--property">client</span>.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+            <span class="syntax--string syntax--quoted">"http://batch-64:80/predict"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">json</span><span class="syntax--keyword syntax--operator">=</span>request_body<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">name</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"batch-64"</span>
+        <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+
+    <span class="syntax--entity syntax--name syntax--function syntax--decorator">@task</span>
+    <span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict_no_batch</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">self</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+        request_body <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span>
+            <span class="syntax--string syntax--quoted">"alcohol"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"malic_acid"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"ash"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"alcalinity_of_ash"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"magnesium"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"total_phenols"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"flavanoids"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"nonflavanoid_phenols"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"proanthocyanins"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"color_intensity"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"hue"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"od280_od315_of_diluted_wines"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--string syntax--quoted">"proline"</span>: <span class="syntax--constant syntax--numeric">1.0</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+        <span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+        <span class="syntax--entity syntax--name syntax--variable syntax--self">self</span>.<span class="syntax--variable syntax--other syntax--object syntax--property">client</span>.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+            <span class="syntax--string syntax--quoted">"http://no-batch:80/predict"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">json</span><span class="syntax--keyword syntax--operator">=</span>request_body<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">name</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"0:batch"</span>
+        <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span></pre>
+<p>Now that you understand how locust works it is finally time to perform load testing on your servers!</p>
+<h2>Load Testing the servers</h2>
+<p>Be sure that you are in the same directory as the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locustfile.py</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker-compose.yml</code> files and run the following command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker-compose</span> up</span></pre>
+<p>Docker Compose will automatically spin up all of your services and create a network for them to communicate. Isn’t that neat?</p>
+<p>Now head over to <a href="http://localhost:8089/">http://localhost:8089/</a> and you will see locust’s interface. Here you can select the amount of users you desire as well as the spawn rate (this is how many new users per second are added until reaching the total amount desired).</p>
+<p><strong>Start with low values because the more users you add more memory will be required and you risk crashing the application.</strong> A good start point is 10 Number of users and 10 Spawn rate.</p>
+<p>Now click on the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Start swarming</code> button and the load test will start. You will see a dashboard that looks like this:</p>
+<p><img src="https://i.imgur.com/2i8pWAI.png" alt="Imgur"></p>
+<p>Each row corresponds to a service you are testing. You can tell which is which by looking at the name (these were defined in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">locustfile.py</code>).</p>
+<p>The first two columns show you the number of requests sent to each server and the number of those requests that failed.</p>
+<p>The next five columns (highlighted in orange) shows some descriptive statistics about the latency of the servers in milliseconds.</p>
+<p>The next column (highlighted in pink) shows the average amount of bytes that is being handled by the server with each request. Notice that the larger the batches, the larger this number will be.</p>
+<p>The next column (highlighted in blue) shows the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">RPS</code> of each server. In this case this metric is not the most reliable since locust tries to send the same amount of traffic to each service but there is some variance in this process. Because of this it is better to take decisions based on the latency information which is agnostic to the amount of requests.</p>
+<p>Now it is your turn to play some more with this. To stop the current test click on the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Stop</code> button in the upper right corner of the screen. Now you can submit new values for the Number of users and Spawn rate. You should be safe using values up to 500 so try a couple of different values and see what you get!</p>
+<h2>Stopping the application</h2>
+<p>Once you are done with this lab go into the terminal window where you run the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker-compose up</code> command and use the key combination <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">ctrl + c</code> once to stop the multi-container application.</p>
+<p>At this point the containers have been stopped but not removed. To remove them along with the network that was created use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker-compose down</code> command.</p>
+<hr>
+<p><strong>Congratulations on finishing this ungraded lab!</strong></p>
+<p>In this lab you saw how to use Docker Compose to run multiple-container applications by setting a configuration file in <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">YAML</code> format. This is a much better alternative than spinning and linking the containers manually as it handles most of this for you. You also were exposed to Locust and how it can be leveraged to perform load testing on your servers.</p>
+<p>Now you should have a clearer understanding of how to use these tools to create production-ready services that will endure the conditions they will be exposed to once deployed to the outside world.</p>
+<p><strong>Keep it up!</strong></p>
+
+  </body>
+</html>

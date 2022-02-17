@@ -41,7 +41,7 @@ You will need to install the following tools to go through this lab:
 
 The application you'll be building will look like the figure below:
 
-<img src='img/kubernetes.png' alt='img/kubernetes.png'>
+<img src='https://i.imgur.com/UtQoff4.png' alt='https://i.imgur.com/UtQoff4.png'>
 
 You will create a deployment that spins up containers that runs a model server. In this case, that will be from the `tensorflow/serving` image you already used in the previous labs. The deployment can be accessed by external terminals (i.e. your users) through an exposed service. This brings inference requests to the model servers and responds with predictions from your model.
 
@@ -53,7 +53,7 @@ You are now almost ready to start your Kubernetes cluster. There is just one mor
 
 You will be using the `half_plus_two` model that you saw in earlier ungraded labs. You can copy it to your `/var/tmp` directory (Mac, Linux) or `C:/tmp` (Windows) so we'll have a common directory to mount to the VM. You can use the command below for Mac and Linux:
 
-```
+```bash
 cp -R ./saved_model_half_plus_two_cpu /var/tmp
 ```
 
@@ -63,13 +63,13 @@ Now you're ready to start Minikube! Run the command below to initialize the VM w
 
 For Mac and Linux:
 
-```
+```bash
 minikube start --mount=True --mount-string="/var/tmp:/var/tmp" --vm-driver=virtualbox
 ```
 
 For Windows:
 
-```
+```bash
 minikube start --mount=True --mount-string="C:/tmp:/var/tmp" --vm-driver=virtualbox
 ```
 
@@ -96,7 +96,7 @@ This would require revisions to some of the commands later and we placed that in
 
 In the official Kubernetes basics tutorial, you mainly used `kubectl` to create objects such as pods, deployments, and services. While this definitely works, your setup will be more portable and easier to maintain if you configure them using [YAML](https://yaml.org/spec/1.2/spec.html) files. We've included these in the `yaml` directory of this ungraded lab so you can peruse how these are constructed. The [Kubernetes API](https://kubernetes.io/docs/reference/kubernetes-api/) also documents the supported fields for each object. For example, the API for Pods can be found [here](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/).
 
-One way to generate this when you don't have a template to begin with is to first use the `kubectl` command then use the `-o yaml` flag to output the YAML file for you. For example, the [kubectl cheatsheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/) shows that you can generate the YAML for a pod running an `nginx` image with this command:
+One way to generate this when you don't have a template to begin with is to first use the `kubectl` command then use the `-o yaml` flag to output the YAML file for you. For example, the [kubectl cheatsheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods) shows that you can generate the YAML for a pod running an `nginx` image with this command:
 
 ```
 kubectl run nginx --image=nginx --dry-run=client -o yaml > pod.yaml
@@ -106,9 +106,9 @@ All objects needed for this lab are already provided and you are free to modify 
 
 ### Config Maps
 
-First, you will create a [config map](https://kubernetes.io/docs/concepts/configuration/configmap/) that defines a `MODEL_NAME` and `MODEL_PATH` variable. This is needed because of how the `tensorflow/serving` image is configured. If you look at the last layer of the docker file [here](https://hub.docker.com/layers/tensorflow/serving/2.6.0/images/sha256-7e831f11c9ef928c09b4064a059066484079ac819991f162a938de0ad4b0fbd5?context=explore), you'll see that it runs a `/usr/bin/tf_serving_entrypoint.sh` script when it starts the container. That script just contains this command it and it should look familiar from the previous ungraded labs:
+First, you will create a [config map](https://kubernetes.io/docs/concepts/configuration/configmap/) that defines a `MODEL_NAME` and `MODEL_PATH` variable. This is needed because of how the `tensorflow/serving` image is configured. If you look at the last layer of the docker file [here](https://hub.docker.com/layers/tensorflow/serving/2.6.0/images/sha256-7e831f11c9ef928c09b4064a059066484079ac819991f162a938de0ad4b0fbd5?context=explore), you'll see that it runs a `/usr/bin/tf_serving_entrypoint.sh` script when it starts the container. That script just contains this command and it should look familiar from the previous ungraded labs:
 
-```
+```bash
 #!/bin/bash 
 
 tensorflow_model_server --port=8500 --rest_api_port=8501 --model_name=${MODEL_NAME} --model_base_path=${MODEL_BASE_PATH}/${MODEL_NAME} "$@"
@@ -116,15 +116,32 @@ tensorflow_model_server --port=8500 --rest_api_port=8501 --model_name=${MODEL_NA
 
 It basically starts up the model server and uses the environment variables `MODEL_BASE_PATH` and `MODEL_NAME` to find the model. Though you can explicitly define this as well in the `Deployment` YAML file, it would be more organized to have it in a configmap so you can plug it in later. Please open `yaml/configmap.yaml` to see the sytax.
 
+<details>
+<summary> <i>configmap.yaml</i></summary>
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tfserving-configs
+data:
+  MODEL_NAME: half_plus_two
+  MODEL_PATH: /models/half_plus_two
+```
+
+</details>
+</br>
+
+
 You can create the object now using `kubectl` as shown below. Notice the `-f` flag to specify a filename. You can also specify a directory but we'll do that later.
 
-```
+```bash
 kubectl apply -f yaml/configmap.yaml
 ```
 
 With that, you should be able to `get` and `describe` the object as before. For instance, `kubectl describe cm tfserving-configs` should show you:
 
-```
+```bash
 Name:         tfserving-configs
 Namespace:    default
 Labels:       <none>
@@ -143,41 +160,118 @@ Events:  <none>
 
 ### Create a Deployment
 
-You will now create the deployment for your application. Please open `yaml/deployment.yaml` to see the spec for this object. You will see that it starts up one replica, uses `tensorflow/serving` as the container image and defines environment variables via the `envFrom` tag. It also exposes port `8501` of the container because you will be sending HTTP requests to it later on. It also defines cpu and memory limits and mounts the volume from the Minikube VM to the container.
+You will now create the deployment for your application. Please open `yaml/deployment.yaml` to see the spec for this object. 
+
+<details>
+<summary> <i>deployment.yaml</i></summary>
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf-serving-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tf-serving
+  template:
+    metadata:
+      labels:
+        app: tf-serving
+    spec:
+      containers:
+      - name: tf-serving
+        image: tensorflow/serving
+        envFrom:
+        - configMapRef:
+            name: tfserving-configs
+        ports:
+        - containerPort: 8501
+        volumeMounts:
+          - name: tf-serving-volume
+            mountPath: /models/half_plus_two
+        resources:
+          requests:
+            memory: 32M
+            cpu: 5m
+          limits:
+            memory: 64M
+            cpu: 10m
+
+      volumes:
+        - name: tf-serving-volume
+          hostPath:
+            path: /var/tmp/saved_model_half_plus_two_cpu
+            type: Directory
+```
+
+</details>
+</br>
+
+You will see that it starts up one replica, uses `tensorflow/serving` as the container image and defines environment variables via the `envFrom` tag. It also exposes port `8501` of the container because you will be sending HTTP requests to it later on. It also defines cpu and memory limits and mounts the volume from the Minikube VM to the container.
 
 As before, you can apply this file to create the object:
 
-```
+```bash
 kubectl apply -f yaml/deployment.yaml
 ```
 
 Running `kubectl get deploy` after around 90 seconds should show you something like below to tell you that the deployment is ready.
 
-```
+```bash
 NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
 tf-serving-deployment   1/1     1            1           15s
 ```
 
 ### Expose the deployment through a service
 
-As you learned in the Kubernetes tutorial before, you will need to create a service so your application can be accessible outside the cluster. We've included `yaml/service.yaml` for that. It defines a [NodePort](https://kubernetes.io/docs/concepts/services-networking/service/#nodeport) service which exposes the node's port 30001. Requests sent to this port will be sent to the containers' specified `targetPort` which is `8501`. 
+As you learned in the Kubernetes tutorial before, you will need to create a service so your application can be accessible outside the cluster. We've included `yaml/service.yaml` for that. 
+
+<details>
+<summary> <i>service.yaml</i></summary>
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: tf-serving-service
+  namespace: default
+  labels:
+    app: tf-serving
+spec:
+  type: NodePort
+  ports:
+  - port: 8501
+    targetPort: 8501
+    nodePort: 30001
+    protocol: TCP
+    name: tf-serving-http
+  selector:
+    app: tf-serving
+```
+
+</details>
+</br>
+
+It defines a [NodePort](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) service which exposes the node's port 30001. Requests sent to this port will be sent to the containers' specified `targetPort` which is `8501`. 
 
 Please apply `yaml/service.yaml` and run `kubectl get svc tf-serving-service`. You should see something like this:
 
-```
+```bash
 NAME                 TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
 tf-serving-service   NodePort   10.103.30.4   <none>        8501:30001/TCP   27s
 ```
 
 You can try accessing the deployment now as a sanity check. The following `curl` command will send a row of inference requests to the Nodeport service:
 
-```
+```bash
 curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST $(minikube ip):30001/v1/models/half_plus_two:predict
 ```
 
 If the command above does not work, you can run `minikube ip` first to get the IP address of the Minikube node. It should return a local IP address like `192.168.99.102` (If you see `127.0.0.1`, please see the troubleshooting sections below). You can then plug this in the command above by replacing the `$(minikube ip)` string. For example:
 
-```
+```bash
 curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST http://192.168.99.102:30001/v1/models/half_plus_two:predict
 ```
 
@@ -250,25 +344,51 @@ Great! Your application is successfully running and can be accessed outside the 
 
 As mentioned in the lectures, one of the great advantages of container orchestration is it allows you to scale your application depending on user needs. Kubernetes provides a [Horizontal Pod Autoscaler (HPA)](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) to create or remove replicasets based on observed metrics. To do this, the HPA queries a [Metrics Server](https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/#metrics-server) to measure resource utilization such as CPU and memory. The Metrics Server is not launched by default in Minikube and needs to be enabled with the following command:
 
-```
+```bash
 minikube addons enable metrics-server
 ```
 
 You should see a prompt saying `🌟  The 'metrics-server' addon is enabled
 ` shortly. This launches a `metrics-server` deployment in the `kube-system` namespace. Run the command below and wait for the deployment to be ready.
 
-```
+```bash
 kubectl get deployment metrics-server -n kube-system
 ```
 
 You should see something like:
 
-```
+```bash
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
 metrics-server   1/1     1            1           76s
 ```
 
-With that, you can now create your autoscaler by applying `yaml/autoscale.yaml`. Please wait for about a minute so it can query the metrics server. Running `kubectl get hpa` should show: 
+With that, you can now create your autoscaler by applying `yaml/autoscale.yaml`. 
+
+<details>
+<summary> <i>autoscale.yaml</i></summary>
+
+```yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: tf-serving
+  name: tf-serving-hpa
+  namespace: default
+spec:
+  maxReplicas: 3
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: tf-serving-deployment
+  targetCPUUtilizationPercentage: 20
+```
+
+</details>
+</br>
+
+Please wait for about a minute so it can query the metrics server. Running `kubectl get hpa` should show: 
 
 ```
 NAME             REFERENCE                          TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
@@ -284,9 +404,26 @@ If it's showing `Unknown` instead of `0%` in the `TARGETS` column, you can try s
 
 To test the autoscaling capability of your deployment, we provided a short bash script (`request.sh`) that will just persistently send requests to your application. Please open a new terminal window, make sure that you're in the root directory of this README file, then run this command (for Linux and Mac):
 
-```
+```bash
 /bin/bash request.sh
 ```
+
+<details>
+<summary> <i>request.sh</i></summary>
+
+```bash
+#!/bin/bash
+
+while sleep 0.01;
+
+do curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST $(minikube ip):30001/v1/models/half_plus_two:predict;
+
+done
+
+```
+
+</details>
+</br>
 
 <details>
 <summary> <i>Troubleshooting: Click here if you used Docker as the VM driver instead of VirtualBox </i></summary>
@@ -381,15 +518,15 @@ minikube dashboard
 
 If you launched this immediately after you ran the request script, you should initially see a single replica running in the `Deployments` and `Pods` section:
 
-<img src='img/initial_load.png'>
+<img src='https://i.imgur.com/BIMBTqX.png'>
 
 After about a minute of running the script, you will observe that the CPU utilization will reach 5 to 6m. This is more than the 20% that we set in the HPA so it will trigger spinning up the additional replicas:
 
-<img src='img/autoscale_start.png'>
+<img src='https://i.imgur.com/nsZTf8W.png'>
 
 Finally, all 3 pods will be ready to accept request and will be sharing the load. See that each pod below shows `2.00m` CPU Usage.
 
-<img src='img/autoscaled.png'>
+<img src='https://i.imgur.com/TZxHzac.png'>
 
 You can now stop the `request.sh` script by pressing `Ctrl/Cmd + C`. Unlike scaling up, scaling down the number of pods will take longer before it is executed. You will wait around 5 minutes (where the CPU usage is below 1m) before you see that there is only one pod running again. This is the behavior for the `autoscaling/v1` API version we are using. There is already a `v2` in the beta stage being developed to override this behavior and you can read more about it [here](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#api-object).
 
@@ -397,7 +534,7 @@ You can now stop the `request.sh` script by pressing `Ctrl/Cmd + C`. Unlike scal
 
 After you're done experimenting, you can destroy the resources you created if you want. You can simply call `kubectl delete -f yaml` to delete all resources defined in the `yaml` folder. You should see something like this:
 
-```
+```bash
 horizontalpodautoscaler.autoscaling "tf-serving-hpa" deleted
 configmap "tfserving-configs" deleted
 deployment.apps "tf-serving-deployment" deleted

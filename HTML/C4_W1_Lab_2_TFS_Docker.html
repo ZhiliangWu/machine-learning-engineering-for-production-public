@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html data-markdown-preview-plus-context="html-export">
+  <head>
+    <meta charset="utf-8" />
+    <title>C4_W1_Lab_2_TFS_Docker</title><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    extensions: ["[a11y]/accessibility-menu.js"],
+    'HTML-CSS': {
+      availableFonts: [],
+      webFont: 'TeX',
+      undefinedFamily: "serif",
+      mtextFontInherit: true,
+    },
+    TeX: {
+  "extensions": [
+    "AMSmath.js",
+    "AMSsymbols.js",
+    "noErrors.js",
+    "noUndefined.js"
+  ],
+  "Macros": {},
+  "equationNumbers": {}
+},
+    showMathMenu: true
+  });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js"></script>
+    <style>.emoji {
+  max-width: 1em !important;
+}
+del {
+  text-decoration: none;
+  position: relative;
+}
+del::after {
+  border-bottom: 1px solid black;
+  content: '';
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+ul.contains-task-list li.task-list-item {
+  position: relative;
+  list-style-type: none;
+}
+ul.contains-task-list li.task-list-item input.task-list-item-checkbox {
+  position: absolute;
+  transform: translateX(-100%);
+  width: 26px;
+}
+span.critic.comment {
+  position: relative;
+}
+span.critic.comment::before {
+  content: '\1f4ac';
+  position: initial;
+}
+span.critic.comment > span {
+  display: none;
+}
+span.critic.comment:hover > span {
+  display: initial;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: 1px solid;
+  border-radius: 5px;
+  max-height: 4em;
+  overflow: auto;
+}
+span.critic.comment:focus > span {
+  display: initial;
+  text-decoration: underline;
+  position: initial;
+  top: auto;
+  left: auto;
+  border: initial;
+  border-radius: initial;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: transparent;
+}
+
+body {
+  overflow: initial !important;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  line-height: 1.6;
+  word-wrap: break-word;
+  padding: 30px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+}
+body > *:first-child {
+  margin-top: 0 !important;
+}
+body > *:last-child {
+  margin-bottom: 0 !important;
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+body .absent {
+  color: #c00;
+}
+body .anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+body .anchor:focus {
+  outline: none;
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  padding-left: 8px;
+  margin-left: -30px;
+  text-decoration: none;
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  display: inline-block;
+}
+body h1 tt,
+body h2 tt,
+body h3 tt,
+body h4 tt,
+body h5 tt,
+body h6 tt,
+body h1 code,
+body h2 code,
+body h3 code,
+body h4 code,
+body h5 code,
+body h6 code {
+  font-size: inherit;
+}
+body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+body h1 .anchor {
+  line-height: 1;
+}
+body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+body h2 .anchor {
+  line-height: 1;
+}
+body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+body h3 .anchor {
+  line-height: 1.2;
+}
+body h4 {
+  font-size: 1.25em;
+}
+body h4 .anchor {
+  line-height: 1.2;
+}
+body h5 {
+  font-size: 1em;
+}
+body h5 .anchor {
+  line-height: 1.1;
+}
+body h6 {
+  font-size: 1em;
+  color: #777;
+}
+body h6 .anchor {
+  line-height: 1.1;
+}
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+body ul,
+body ol {
+  padding-left: 2em;
+}
+body ul.no-list,
+body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+body ul ul,
+body ul ol,
+body ol ol,
+body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+body li > p {
+  margin-top: 16px;
+}
+body dl {
+  padding: 0;
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+body blockquote > :first-child {
+  margin-top: 0;
+}
+body blockquote > :last-child {
+  margin-bottom: 0;
+}
+body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+body table th {
+  font-weight: bold;
+}
+body table th,
+body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body .emoji {
+  max-width: none;
+}
+body span.frame {
+  display: block;
+  overflow: hidden;
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+body span.frame span img {
+  display: block;
+  float: left;
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #333;
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+body span.float-left span {
+  margin: 13px 0 0;
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+body code,
+body tt {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+}
+body code:before,
+body tt:before,
+body code:after,
+body tt:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+body code br,
+body tt br {
+  display: none;
+}
+body del code {
+  text-decoration: inherit;
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+body .highlight {
+  margin-bottom: 16px;
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+body pre {
+  word-wrap: normal;
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+body pre code:before,
+body pre tt:before,
+body pre code:after,
+body pre tt:after {
+  content: normal;
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+span.critic.comment > span {
+  background-color: #fff;
+}
+a {
+  color: #337ab7;
+}
+
+.bracket-matcher .region {
+  border-bottom: 1px dotted lime;
+  position: absolute;
+}
+.line-number.bracket-matcher.bracket-matcher {
+  color: #c5c8c6;
+  background-color: #373b41;
+}
+
+pre.editor-colors {
+  background-color: #1d1f21;
+  color: #c5c8c6;
+}
+pre.editor-colors .wrap-guide {
+  background-color: #4f5256;
+}
+pre.editor-colors .indent-guide {
+  color: #4f5256;
+}
+pre.editor-colors .invisible-character {
+  color: #4f5256;
+}
+pre.editor-colors .gutter {
+  background-color: #1d1f21;
+  color: #969896;
+}
+pre.editor-colors .gutter .line-number {
+  padding: 0 0.25em 0 0.5em;
+  -webkit-font-smoothing: antialiased;
+}
+pre.editor-colors .gutter .line-number.cursor-line {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.cursor-line-no-selection {
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.folded,
+pre.editor-colors .gutter .line-number:after,
+pre.editor-colors .fold-marker:after {
+  color: #969896;
+}
+pre.editor-colors .invisible {
+  color: #c5c8c6;
+}
+pre.editor-colors .cursor {
+  color: #ffffff;
+}
+pre.editor-colors .selection .region {
+  background-color: #373b41;
+}
+pre.editor-colors .bracket-matcher .region {
+  border-color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment .syntax--markup.syntax--link {
+  color: #969896;
+}
+.syntax--entity.syntax--name.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--other.syntax--inherited-class {
+  color: #b5bd68;
+}
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--control {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--operator {
+  color: #c5c8c6;
+}
+.syntax--keyword.syntax--other.syntax--special-method {
+  color: #81a2be;
+}
+.syntax--keyword.syntax--other.syntax--unit {
+  color: #de935f;
+}
+.syntax--storage {
+  color: #b294bb;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--constant.syntax--other.syntax--color {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--other.syntax--symbol {
+  color: #8abeb7;
+}
+.syntax--variable {
+  color: #cc6666;
+}
+.syntax--variable.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--variable.syntax--parameter.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--invalid.syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp {
+  color: #8abeb7;
+}
+.syntax--string.syntax--regexp .syntax--source.syntax--ruby.syntax--embedded {
+  color: #f0c674;
+}
+.syntax--string.syntax--other.syntax--link {
+  color: #cc6666;
+}
+.syntax--punctuation.syntax--definition.syntax--parameters,
+.syntax--punctuation.syntax--definition.syntax--array {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--definition.syntax--heading,
+.syntax--punctuation.syntax--definition.syntax--identity {
+  color: #81a2be;
+}
+.syntax--punctuation.syntax--definition.syntax--bold {
+  color: #f0c674;
+  font-weight: bold;
+}
+.syntax--punctuation.syntax--definition.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--punctuation.syntax--section.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--punctuation.syntax--section.syntax--method,
+.syntax--punctuation.syntax--section.syntax--class,
+.syntax--punctuation.syntax--section.syntax--inner-class {
+  color: #c5c8c6;
+}
+.syntax--support.syntax--class {
+  color: #f0c674;
+}
+.syntax--support.syntax--function {
+  color: #8abeb7;
+}
+.syntax--support.syntax--function.syntax--any-method {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--class,
+.syntax--entity.syntax--name.syntax--type.syntax--class {
+  color: #f0c674;
+}
+.syntax--entity.syntax--name.syntax--section {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--other.syntax--attribute-name {
+  color: #de935f;
+}
+.syntax--entity.syntax--other.syntax--attribute-name.syntax--id {
+  color: #81a2be;
+}
+.syntax--meta.syntax--class {
+  color: #f0c674;
+}
+.syntax--meta.syntax--class.syntax--body {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--link {
+  color: #de935f;
+}
+.syntax--meta.syntax--method-call,
+.syntax--meta.syntax--method {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--require {
+  color: #81a2be;
+}
+.syntax--meta.syntax--selector {
+  color: #b294bb;
+}
+.syntax--meta.syntax--separator {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--tag {
+  color: #c5c8c6;
+}
+.syntax--none {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--heading .syntax--punctuation.syntax--definition.syntax--heading {
+  color: #81a2be;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--quote {
+  color: #de935f;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--source.syntax--gfm .syntax--markup {
+  -webkit-font-smoothing: auto;
+}
+.syntax--source.syntax--gfm .syntax--link .syntax--entity {
+  color: #8abeb7;
+}
+.syntax--source.syntax--cs .syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation.syntax--string {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--constant.syntax--language.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--constant.syntax--language.syntax--json {
+  color: #8abeb7;
+}
+/*
+   This defines styling rules for syntax classes.
+
+   See the naming conventions for a list of syntax classes:
+   https://flight-manual.atom.io/hacking-atom/sections/syntax-naming-conventions
+
+   When styling rules conflict:
+   - The last rule overrides previous rules.
+   - The rule with most classes and pseudo-classes overrides the last rule.
+*/
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--storage {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--type {
+  color: #f0c674;
+}
+.syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--function {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--variable {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--support {
+  color: #cc6666;
+}
+.syntax--entity.syntax--decorator:last-child {
+  color: #81a2be;
+}
+.syntax--entity.syntax--label {
+  text-decoration: underline;
+}
+.syntax--entity.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--entity.syntax--operator {
+  color: #81a2be;
+}
+.syntax--entity.syntax--operator.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--attribute {
+  color: #de935f;
+}
+.syntax--punctuation {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--immutable {
+  color: #b5bd68;
+}
+.syntax--string.syntax--part {
+  color: #8abeb7;
+}
+.syntax--string.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--string.syntax--regexp {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp.syntax--language {
+  color: #b294bb;
+}
+.syntax--string.syntax--regexp.syntax--variable {
+  color: #81a2be;
+}
+.syntax--string.syntax--regexp.syntax--punctuation {
+  color: #a3685a;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--code {
+  color: #8abeb7;
+}
+.syntax--text {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--list.syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--alt {
+  color: #8abeb7;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--deleted .syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--changed .syntax--punctuation {
+  color: #b294bb;
+}
+.syntax--markup.syntax--commented {
+  color: #969896;
+}
+.syntax--markup.syntax--commented .syntax--punctuation {
+  color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment.syntax--caption {
+  color: #9ea09e;
+  font-weight: bold;
+}
+.syntax--comment.syntax--term {
+  color: #a8aaa8;
+}
+.syntax--comment.syntax--punctuation {
+  color: #969896;
+  font-weight: normal;
+}
+.syntax--invalid:not(.syntax--punctuation).syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--tag {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--property {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--variable {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--keyframe {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--constant {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--media {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset.syntax--unit {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--attribute-value {
+  color: #b5bd68;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--wildcard {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--attribute {
+  color: #c5c8c6;
+}
+
+/*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed and saved.
+ *
+ * Add your own CSS or Less to fully customize Atom.
+ * If you are unfamiliar with Less, you can read more about it here:
+ * http://lesscss.org
+ */
+/*
+ * Examples
+ * (To see them, uncomment and save)
+ */
+</style>
+
+  </head>
+  <body>
+    <h1>Ungraded lab: First look at Tensorflow Serving with Docker</h1>
+<p>Welcome to this ungraded lab. Here you will take a look at using <a href="https://www.tensorflow.org/tfx/guide/serving">Tensorflow Serving</a> with Docker. This is one of the easiest ways to get introduced to this awesome serving system for machine learning models since the image already contains all the necessary dependencies and configuration to run TFS out of the box.</p>
+<p>In this lab you will be using TFS to deploy a dummy machine learning model locally. This lab is inspired by this official TF <a href="https://www.tensorflow.org/tfx/serving/docker">tutorial</a>.</p>
+<p>If you are a Windows user remember that <strong>this lab is meant to be run using a WSL2 shell.</strong> To open such shell use the Windows search bar and type either <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">wsl</code> or <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">bash</code>, one of these should be available if you installed WSL2 previously.</p>
+<p>Open your terminal (or shell) and let’s get started!</p>
+<hr>
+<h2>Pulling the image</h2>
+<p>Begin by pulling the TFS docker image from the Docker hub:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> pull tensorflow/serving</span></pre>
+<p>This is the most minimal image that you can run TFS on. It contains all of the necessary dependencies to run TFS and was created with image size in mind, as a result of this it is around 400 mb in size.</p>
+<h2>Clone the repo with the dummy model</h2>
+<p>Now you will clone the official TFS <a href="https://github.com/tensorflow/serving">repo</a>, which contains a dummy model named <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Half Plus Two</code> that returns <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">0.5 * x + 2</code> for any value of <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">x</code>.</p>
+<p>You will do the cloning in the temporal directory of your filesystem so that your machine does not get cluttered.</p>
+<p>Run the following three commands:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">mkdir</span> <span class="syntax--entity syntax--other syntax--attribute-name">-p</span> /tmp/tfserving
+
+<span class="syntax--entity syntax--name syntax--function"><span class="syntax--support syntax--function">cd</span></span> /tmp/tfserving
+
+<span class="syntax--entity syntax--name syntax--function">git</span> clone https://github.com/tensorflow/serving</span></pre>
+<p>These commands perform these operations in order:</p>
+<ul>
+<li>Create a directory called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">tfserving</code> under the temporal directory <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">/tmp</code>.</li>
+<li>Change your current directory to the one that was just created</li>
+<li>Clone the repo in that location</li>
+</ul>
+<p>After running these commands you can return to your previous directory by using <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd -</code> or you can simply close this command line window.</p>
+<h2>Run Tensorflow Serving</h2>
+<p>Since the image you just pulled contains all of the software needed to run the model under TFS, all that is left is to run a container out of the image.</p>
+<p>A vanilla <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker run</code> looks like this:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> run name-of-the-image</span></pre>
+<p>However, you can specify different flags to achieve different functionalities. You will see how this works in a bit.</p>
+<p>Take a look at the command that will spin up a container to serve the model under TFS:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> run <span class="syntax--entity syntax--other syntax--attribute-name">--rm</span> <span class="syntax--entity syntax--other syntax--attribute-name">-p</span> 8501:8501 \
+  <span class="syntax--entity syntax--other syntax--attribute-name">--mount</span> type=bind,\
+source=/tmp/tfserving/serving/tensorflow_serving/servables/tensorflow/testdata/saved_model_half_plus_two_cpu,\
+target=/models/half_plus_two \
+  <span class="syntax--entity syntax--other syntax--attribute-name">-e</span> MODEL_NAME=half_plus_two <span class="syntax--entity syntax--other syntax--attribute-name">-t</span> tensorflow/serving <span class="syntax--keyword syntax--operator">&amp;</span></span></pre>
+<p>Wow, there is a lot of information in this command. Let’s break it down to understand what every flag is doing:</p>
+<ul>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--rm</code>: Delete this container after stopping running it. This is to avoid having to manually delete the container. Deleting unused containers helps your system to stay clean and tidy.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-p 8501:8501</code>: This flags performs an operation knows as <strong>port mapping</strong>. The container, as well as your local machine, has its own set of ports. In order to access the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">port 8501</code> within the container, you need to <strong>map</strong> it to a port on your computer. In this case it is mapped to the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">port 8501</code> in your machine. This port is chosen as it is the default port to interact with the model through a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">REST API</code>. If you were using a different protocol such as <a href="https://grpc.io/"><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">gRPC</code></a> you will need to use <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">port 8500</code>. More information on this in the <a href="https://www.tensorflow.org/tfx/serving/docker">tutorial</a> mentioned at the beginning of the lab.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--mount type=bind,source=dir/in/your/pc,target=dir/in/container</code>: This flag allows you to <strong>mount</strong> a directory in your pc to a directory within the container. This is very important because containers usually have short lifetimes and without mounting files onto them there is no way of persisting changes done to these files when the container was running.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-e MODEL_NAME=half_plus_two</code>: Will create the environment variable <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">MODEL_NAME</code> and assign to it the value of <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">half_plus_two</code>.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-t</code>: Attaches a pseudo-terminal to the container so you can check what is being printed in the standard streams of the container. This will allow you to see the logs printed out by TFS.</p>
+</li>
+</ul>
+<p>After running this command TFS will spin up and host the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Half Plus Two</code> model.</p>
+<hr>
+<h2>Consuming the model</h2>
+<p>Now that the model is being served on <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">port 8501</code> you can use an HTTP client to get predictions from it. Going forward you will be shown how to do this with <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> but feel free to use any client of your choice.</p>
+<p>Since you need to provide some data that the server will process you should use a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">HTTP POST</code> request.</p>
+<p>Let’s do inference for a batch of three numbers, open a new command line window or tab and run the following command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">curl</span> <span class="syntax--entity syntax--other syntax--attribute-name">-d</span> <span class="syntax--string">'{"instances": [1.0, 2.0, 5.0]}'</span> \
+  <span class="syntax--entity syntax--other syntax--attribute-name">-X</span> POST http://localhost:8501/v1/models/half_plus_two:predict</span></pre>
+<p>As with the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker run</code> command let’s break down the flags in this one:</p>
+<ul>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-d</code>: The <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">d</code> stands for data. This is the data that you are going to send to the server for it to process. Since you are communicating with the model via <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">REST</code> you should provide the data in a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code> format. TFS has the convention that the <strong>key</strong> of this object should be the string <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">instances</code> and the <strong>value</strong> should be a list that contains each data point that you want to make inference for.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-X</code>: This flag allows you to specify the desired <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">HTTP method</code>. By default <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> uses the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">GET</code> method but in this case it should be <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">POST</code>.</li>
+</ul>
+<p>The last parameter of the command is the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">URL</code> where it should make the request to. Let’s break down the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">URL</code> as well:</p>
+<ul>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">http://localhost:8501</code>: Stands for your own machine in the port 8501, as you specified earlier.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">v1</code>: Refers to the version of TFS used. Right now this part of the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">URL</code> will always be <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">v1</code>.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">models/half_plus_two</code>: This part refers to what model should be served. Since you set the environment variable <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">MODEL_NAME</code> to have the value <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">half_plus_two</code>, this is the name of the model.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">predict</code>: Allows TFS to know that the model is gonna be used for inference (or prediction).</li>
+</ul>
+<p>After running the request you should be prompted with the prediction for each one of the three numbers you submitted.</p>
+<hr>
+<h2>Stopping the server</h2>
+<p>Finally you will learn how to stop the server running within the Docker container. In this case to stop the container is equivalent to stopping the server, to do so, run the following command to see all of the running Docker processes (or containers):</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> ps</span></pre>
+<p>This will display some relevant information for each running docker process. If you want to also check this information for stopped containers use the flag <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-a</code>.</p>
+<p>Docker automatically assigns a unique name to each container and this can be seen with the above command which should yield an output similar to this:</p>
+<p><img src="https://i.imgur.com/G5DwJc3.png" alt="Imgur"></p>
+<p>To stop a container simply use the command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> stop container_name</span></pre>
+<p>In this case the command will be:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> stop laughing_yonath</span></pre>
+<p>After some seconds you should see that the process exited on the terminal that you spined up the container.</p>
+<hr>
+<p><strong>Congratulations on finishing this ungraded lab!</strong></p>
+<p>Now you should have a better sense of how Docker can be leveraged to serve your Machine Learning models. You should also have a better understanding of how to use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker run</code> command to spin up containers and of how to use <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> to interact with web servers.</p>
+<p>This lab used a dummy model but in future labs you will see this process with real models and further TFS features.</p>
+<p><strong>Keep it up!</strong></p>
+
+  </body>
+</html>

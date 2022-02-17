@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html data-markdown-preview-plus-context="html-export">
+  <head>
+    <meta charset="utf-8" />
+    <title>C4_W3_Lab_4_Github_Actions</title><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    extensions: ["[a11y]/accessibility-menu.js"],
+    'HTML-CSS': {
+      availableFonts: [],
+      webFont: 'TeX',
+      undefinedFamily: "serif",
+      mtextFontInherit: true,
+    },
+    TeX: {
+  "extensions": [
+    "AMSmath.js",
+    "AMSsymbols.js",
+    "noErrors.js",
+    "noUndefined.js"
+  ],
+  "Macros": {},
+  "equationNumbers": {}
+},
+    showMathMenu: true
+  });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js"></script>
+    <style>.emoji {
+  max-width: 1em !important;
+}
+del {
+  text-decoration: none;
+  position: relative;
+}
+del::after {
+  border-bottom: 1px solid black;
+  content: '';
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+ul.contains-task-list li.task-list-item {
+  position: relative;
+  list-style-type: none;
+}
+ul.contains-task-list li.task-list-item input.task-list-item-checkbox {
+  position: absolute;
+  transform: translateX(-100%);
+  width: 26px;
+}
+span.critic.comment {
+  position: relative;
+}
+span.critic.comment::before {
+  content: '\1f4ac';
+  position: initial;
+}
+span.critic.comment > span {
+  display: none;
+}
+span.critic.comment:hover > span {
+  display: initial;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: 1px solid;
+  border-radius: 5px;
+  max-height: 4em;
+  overflow: auto;
+}
+span.critic.comment:focus > span {
+  display: initial;
+  text-decoration: underline;
+  position: initial;
+  top: auto;
+  left: auto;
+  border: initial;
+  border-radius: initial;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: transparent;
+}
+
+body {
+  overflow: initial !important;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  line-height: 1.6;
+  word-wrap: break-word;
+  padding: 30px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+}
+body > *:first-child {
+  margin-top: 0 !important;
+}
+body > *:last-child {
+  margin-bottom: 0 !important;
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+body .absent {
+  color: #c00;
+}
+body .anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+body .anchor:focus {
+  outline: none;
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  padding-left: 8px;
+  margin-left: -30px;
+  text-decoration: none;
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  display: inline-block;
+}
+body h1 tt,
+body h2 tt,
+body h3 tt,
+body h4 tt,
+body h5 tt,
+body h6 tt,
+body h1 code,
+body h2 code,
+body h3 code,
+body h4 code,
+body h5 code,
+body h6 code {
+  font-size: inherit;
+}
+body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+body h1 .anchor {
+  line-height: 1;
+}
+body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+body h2 .anchor {
+  line-height: 1;
+}
+body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+body h3 .anchor {
+  line-height: 1.2;
+}
+body h4 {
+  font-size: 1.25em;
+}
+body h4 .anchor {
+  line-height: 1.2;
+}
+body h5 {
+  font-size: 1em;
+}
+body h5 .anchor {
+  line-height: 1.1;
+}
+body h6 {
+  font-size: 1em;
+  color: #777;
+}
+body h6 .anchor {
+  line-height: 1.1;
+}
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+body ul,
+body ol {
+  padding-left: 2em;
+}
+body ul.no-list,
+body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+body ul ul,
+body ul ol,
+body ol ol,
+body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+body li > p {
+  margin-top: 16px;
+}
+body dl {
+  padding: 0;
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+body blockquote > :first-child {
+  margin-top: 0;
+}
+body blockquote > :last-child {
+  margin-bottom: 0;
+}
+body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+body table th {
+  font-weight: bold;
+}
+body table th,
+body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body .emoji {
+  max-width: none;
+}
+body span.frame {
+  display: block;
+  overflow: hidden;
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+body span.frame span img {
+  display: block;
+  float: left;
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #333;
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+body span.float-left span {
+  margin: 13px 0 0;
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+body code,
+body tt {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+}
+body code:before,
+body tt:before,
+body code:after,
+body tt:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+body code br,
+body tt br {
+  display: none;
+}
+body del code {
+  text-decoration: inherit;
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+body .highlight {
+  margin-bottom: 16px;
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+body pre {
+  word-wrap: normal;
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+body pre code:before,
+body pre tt:before,
+body pre code:after,
+body pre tt:after {
+  content: normal;
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+span.critic.comment > span {
+  background-color: #fff;
+}
+a {
+  color: #337ab7;
+}
+
+.bracket-matcher .region {
+  border-bottom: 1px dotted lime;
+  position: absolute;
+}
+.line-number.bracket-matcher.bracket-matcher {
+  color: #c5c8c6;
+  background-color: #373b41;
+}
+
+pre.editor-colors {
+  background-color: #1d1f21;
+  color: #c5c8c6;
+}
+pre.editor-colors .wrap-guide {
+  background-color: #4f5256;
+}
+pre.editor-colors .indent-guide {
+  color: #4f5256;
+}
+pre.editor-colors .invisible-character {
+  color: #4f5256;
+}
+pre.editor-colors .gutter {
+  background-color: #1d1f21;
+  color: #969896;
+}
+pre.editor-colors .gutter .line-number {
+  padding: 0 0.25em 0 0.5em;
+  -webkit-font-smoothing: antialiased;
+}
+pre.editor-colors .gutter .line-number.cursor-line {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.cursor-line-no-selection {
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.folded,
+pre.editor-colors .gutter .line-number:after,
+pre.editor-colors .fold-marker:after {
+  color: #969896;
+}
+pre.editor-colors .invisible {
+  color: #c5c8c6;
+}
+pre.editor-colors .cursor {
+  color: #ffffff;
+}
+pre.editor-colors .selection .region {
+  background-color: #373b41;
+}
+pre.editor-colors .bracket-matcher .region {
+  border-color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment .syntax--markup.syntax--link {
+  color: #969896;
+}
+.syntax--entity.syntax--name.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--other.syntax--inherited-class {
+  color: #b5bd68;
+}
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--control {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--operator {
+  color: #c5c8c6;
+}
+.syntax--keyword.syntax--other.syntax--special-method {
+  color: #81a2be;
+}
+.syntax--keyword.syntax--other.syntax--unit {
+  color: #de935f;
+}
+.syntax--storage {
+  color: #b294bb;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--constant.syntax--other.syntax--color {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--other.syntax--symbol {
+  color: #8abeb7;
+}
+.syntax--variable {
+  color: #cc6666;
+}
+.syntax--variable.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--variable.syntax--parameter.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--invalid.syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp {
+  color: #8abeb7;
+}
+.syntax--string.syntax--regexp .syntax--source.syntax--ruby.syntax--embedded {
+  color: #f0c674;
+}
+.syntax--string.syntax--other.syntax--link {
+  color: #cc6666;
+}
+.syntax--punctuation.syntax--definition.syntax--parameters,
+.syntax--punctuation.syntax--definition.syntax--array {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--definition.syntax--heading,
+.syntax--punctuation.syntax--definition.syntax--identity {
+  color: #81a2be;
+}
+.syntax--punctuation.syntax--definition.syntax--bold {
+  color: #f0c674;
+  font-weight: bold;
+}
+.syntax--punctuation.syntax--definition.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--punctuation.syntax--section.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--punctuation.syntax--section.syntax--method,
+.syntax--punctuation.syntax--section.syntax--class,
+.syntax--punctuation.syntax--section.syntax--inner-class {
+  color: #c5c8c6;
+}
+.syntax--support.syntax--class {
+  color: #f0c674;
+}
+.syntax--support.syntax--function {
+  color: #8abeb7;
+}
+.syntax--support.syntax--function.syntax--any-method {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--class,
+.syntax--entity.syntax--name.syntax--type.syntax--class {
+  color: #f0c674;
+}
+.syntax--entity.syntax--name.syntax--section {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--other.syntax--attribute-name {
+  color: #de935f;
+}
+.syntax--entity.syntax--other.syntax--attribute-name.syntax--id {
+  color: #81a2be;
+}
+.syntax--meta.syntax--class {
+  color: #f0c674;
+}
+.syntax--meta.syntax--class.syntax--body {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--link {
+  color: #de935f;
+}
+.syntax--meta.syntax--method-call,
+.syntax--meta.syntax--method {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--require {
+  color: #81a2be;
+}
+.syntax--meta.syntax--selector {
+  color: #b294bb;
+}
+.syntax--meta.syntax--separator {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--tag {
+  color: #c5c8c6;
+}
+.syntax--none {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--heading .syntax--punctuation.syntax--definition.syntax--heading {
+  color: #81a2be;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--quote {
+  color: #de935f;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--source.syntax--gfm .syntax--markup {
+  -webkit-font-smoothing: auto;
+}
+.syntax--source.syntax--gfm .syntax--link .syntax--entity {
+  color: #8abeb7;
+}
+.syntax--source.syntax--cs .syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation.syntax--string {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--constant.syntax--language.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--constant.syntax--language.syntax--json {
+  color: #8abeb7;
+}
+/*
+   This defines styling rules for syntax classes.
+
+   See the naming conventions for a list of syntax classes:
+   https://flight-manual.atom.io/hacking-atom/sections/syntax-naming-conventions
+
+   When styling rules conflict:
+   - The last rule overrides previous rules.
+   - The rule with most classes and pseudo-classes overrides the last rule.
+*/
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--storage {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--type {
+  color: #f0c674;
+}
+.syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--function {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--variable {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--support {
+  color: #cc6666;
+}
+.syntax--entity.syntax--decorator:last-child {
+  color: #81a2be;
+}
+.syntax--entity.syntax--label {
+  text-decoration: underline;
+}
+.syntax--entity.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--entity.syntax--operator {
+  color: #81a2be;
+}
+.syntax--entity.syntax--operator.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--attribute {
+  color: #de935f;
+}
+.syntax--punctuation {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--immutable {
+  color: #b5bd68;
+}
+.syntax--string.syntax--part {
+  color: #8abeb7;
+}
+.syntax--string.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--string.syntax--regexp {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp.syntax--language {
+  color: #b294bb;
+}
+.syntax--string.syntax--regexp.syntax--variable {
+  color: #81a2be;
+}
+.syntax--string.syntax--regexp.syntax--punctuation {
+  color: #a3685a;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--code {
+  color: #8abeb7;
+}
+.syntax--text {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--list.syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--alt {
+  color: #8abeb7;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--deleted .syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--changed .syntax--punctuation {
+  color: #b294bb;
+}
+.syntax--markup.syntax--commented {
+  color: #969896;
+}
+.syntax--markup.syntax--commented .syntax--punctuation {
+  color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment.syntax--caption {
+  color: #9ea09e;
+  font-weight: bold;
+}
+.syntax--comment.syntax--term {
+  color: #a8aaa8;
+}
+.syntax--comment.syntax--punctuation {
+  color: #969896;
+  font-weight: normal;
+}
+.syntax--invalid:not(.syntax--punctuation).syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--tag {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--property {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--variable {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--keyframe {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--constant {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--media {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset.syntax--unit {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--attribute-value {
+  color: #b5bd68;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--wildcard {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--attribute {
+  color: #c5c8c6;
+}
+
+/*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed and saved.
+ *
+ * Add your own CSS or Less to fully customize Atom.
+ * If you are unfamiliar with Less, you can read more about it here:
+ * http://lesscss.org
+ */
+/*
+ * Examples
+ * (To see them, uncomment and save)
+ */
+</style>
+
+  </head>
+  <body>
+    <h1>Week 3 Ungraded Lab: Intro to CI/CD pipelines with GitHub Actions</h1>
+<p>Welcome! During this lab you will take a look at how to use <a href="https://github.com/features/actions">GitHub Actions</a> to automate your Machine Learning workflows. You will also perform some unit testing using <a href="https://docs.pytest.org/en/6.2.x/">pytest</a> to evaluate changes to your code before deploying into production.</p>
+<p>This lab is going to be different to the previous ones for several reasons:</p>
+<ul>
+<li>
+<p>You will need to <a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo">fork</a> this repo so you can run GH actions on your own copy of the repo.</p>
+</li>
+<li>
+<p>You will need to edit the code by pasting snippets provided in this tutorial.</p>
+</li>
+<li>
+<p>You will push changes to your forked repo by using git commands. Don’t worry if you are not very familiar with git as all commands will be explained here.</p>
+</li>
+</ul>
+<p>Let’s get started!</p>
+<hr>
+<h2>What is GH Actions?</h2>
+<p>This is an amazing tool that allows you to define automatic workflows for specific events within a GH repo. For instance you can create Python script versions of all your Jupyter notebooks every time you push or pull changes from the remote repository.</p>
+<p>In this lab you will set up an action that will run the unit tests defined for your code every time you push changes to the remote repo.</p>
+<p>To give you an idea of the flexibility of this tool, you could also (although not covered in this lab) set the action to build a Docker image out of your code if all the unit tests were passed and sent that image to a Google Cloud Bucket where it can be used to deploy your code. This would mean that you successfully automated your deployment with every push of changes.</p>
+<h2>Fork the public repo</h2>
+<p>Forking a repo is simply creating your own copy of it. It is often used in Open Source development as a way of keeping everything tidy. Instead of working directly on a public repo (in which you probably won’t have writing access) you can work on your fork and submit Pull Requests from it. To fork a repo just click on the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Fork</code> button on the top right corner of the repo:</p>
+<p><img src="https://i.imgur.com/9Pb7wq4.png" alt="fork-repo"></p>
+<p>Once the forking process has been completed you should have a copy of the repo registered under your username, like this:</p>
+<p><img src="https://i.imgur.com/KJmkSve.png" alt="your-fork"></p>
+<p>Now you need to clone it into your local machine. You can do so by using these commands (be sure to replace the username used here for your own):</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">git</span> clone https://github.com/your-username/machine-learning-engineering-for-production-public.git</span></pre>
+<p>or for cloning via SSH use:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">git</span> clone git@github.com:your-username/machine-learning-engineering-for-production-public.git</span></pre>
+<p>If you are unsure which method to use for cloning, use the first one.</p>
+<p>Now you need to enable Actions for your fork. You can do so by clicking on the Actions button:</p>
+<p><img src="https://i.imgur.com/pqFm5nf.png" alt="action-button"></p>
+<p>And clicking the green button to enable Actions:</p>
+<p><img src="https://i.imgur.com/PDV81V5.png" alt="enable-actions"></p>
+<h2>Navigating the fork</h2>
+<p>Now <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd</code> into your fork. You can do so by using the command <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd machine-learning-engineering-for-production-public</code> while on the directory that contains your fork.</p>
+<p>Before jumping to the directory with the files for this lab, notice a hidden folder in the root of the repo called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">.github</code>. Within there is another directory called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">workflows</code>, here is where all of the files for configuring Actions should be placed. These files should be in <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">YAML</code> format. In this case you should encounter a file called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">course4-week3-lab.yml</code> that will be responsible for setting up your desired action of running unit tests. For convenience the contents of the file are placed here:</p>
+<pre class="editor-colors lang-yml" style="tab-size: 4;"><span class="syntax--source syntax--yaml"><span class="syntax--comment syntax--line syntax--number-sign syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--comment syntax--yaml">#</span> Run unit tests for your Python application</span>
+
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">C4W3-Ungraded-Lab</span>
+
+<span class="syntax--comment syntax--line syntax--number-sign syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--comment syntax--yaml">#</span> Controls when the action will run. </span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">on</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--comment syntax--line syntax--number-sign syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--comment syntax--yaml">#</span> Triggers the workflow on push request events only when there are changes in the desired path</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">push</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">paths</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--string syntax--quoted syntax--single syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--string syntax--begin syntax--yaml">'</span>course4/week3-ungraded-labs/C4_W3_Lab_4_Github_Actions/**<span class="syntax--punctuation syntax--definition syntax--string syntax--end syntax--yaml">'</span></span>
+
+<span class="syntax--comment syntax--line syntax--number-sign syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--comment syntax--yaml">#</span> A workflow run is made up of one or more jobs that can run sequentially or in parallel</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">jobs</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--comment syntax--line syntax--number-sign syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--comment syntax--yaml">#</span> This workflow contains a single job called "test"</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">test</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--comment syntax--line syntax--number-sign syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--comment syntax--yaml">#</span> The type of runner that the job will run on</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">runs-on</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">ubuntu-latest</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">defaults</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--entity syntax--name syntax--tag syntax--yaml">run</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+        <span class="syntax--comment syntax--line syntax--number-sign syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--comment syntax--yaml">#</span> Use bash as the shell</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">shell</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">bash</span>
+        <span class="syntax--comment syntax--line syntax--number-sign syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--comment syntax--yaml">#</span> Specify the working directory for the workflow</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">working-directory</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">course4/week3-ungraded-labs/C4_W3_Lab_4_Github_Actions/</span>
+
+    <span class="syntax--comment syntax--line syntax--number-sign syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--comment syntax--yaml">#</span> Steps represent a sequence of tasks that will be executed as part of the job</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">steps</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Checkout</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">uses</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">actions/checkout@v2</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> 
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Set up Python</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">uses</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">actions/setup-python@v2</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">with</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+          <span class="syntax--entity syntax--name syntax--tag syntax--yaml">python-version</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--quoted syntax--single syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--string syntax--begin syntax--yaml">'</span>3.7.7<span class="syntax--punctuation syntax--definition syntax--string syntax--end syntax--yaml">'</span></span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> 
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Install dependencies</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">run</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--block syntax--yaml">|
+          python -m pip install --upgrade pip
+          pip install numpy fastapi uvicorn scikit-learn pytest
+</span>      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Test with pytest</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">run</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--block syntax--yaml">|
+          pytest</span></span></pre>
+<p>Wow that is a long file. Let’s break it down piece by piece (notice that comments are trimmed to keep the snippets short but they also provide important information so be sure to read them if you don’t understand something):</p>
+<pre class="editor-colors lang-yml" style="tab-size: 4;"><span class="syntax--source syntax--yaml"><span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">C4W3-Ungraded-Lab</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">on</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">push</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">paths</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--string syntax--quoted syntax--single syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--string syntax--begin syntax--yaml">'</span>course4/week3-ungraded-labs/C4_W3_Lab_4_Github_Actions/**<span class="syntax--punctuation syntax--definition syntax--string syntax--end syntax--yaml">'</span></span></span></pre>
+<p>In this first part you need to define a name for your Action so you can differentiate it from other ones. After this you need to specify what will trigger it, in this case the Action will be run automatically with a <strong>push</strong> that has changes to any file within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">course4/week3-ungraded-labs/C4_W3_Lab_4_Github_Actions</code> directory.</p>
+<pre class="editor-colors lang-yml" style="tab-size: 4;"><span class="syntax--source syntax--yaml"><span class="syntax--entity syntax--name syntax--tag syntax--yaml">jobs</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">test</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">runs-on</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">ubuntu-latest</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">defaults</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--entity syntax--name syntax--tag syntax--yaml">run</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">shell</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">bash</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">working-directory</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">course4/week3-ungraded-labs/C4_W3_Lab_4_Github_Actions/</span></span></pre>
+<p>In the next part you need to define all of the jobs than will run when this action is triggered. In this case you only need one job, which will be named <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">test</code> and will run in an environment that uses the latest release of Ubuntu. You can also define some default behavior for the job such as the desired shell, <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">bash</code> in this case, and the working directory within the repo. This means that the action will run as it had <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd</code> into the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">course4/week3-ungraded-labs/C4_W3_Lab_4_Github_Actions/</code> directory first.</p>
+<pre class="editor-colors lang-yml" style="tab-size: 4;"><span class="syntax--source syntax--yaml">    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">steps</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Checkout</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">uses</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">actions/checkout@v2</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> 
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Set up Python</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">uses</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">actions/setup-python@v2</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">with</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+          <span class="syntax--entity syntax--name syntax--tag syntax--yaml">python-version</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--quoted syntax--single syntax--yaml"><span class="syntax--punctuation syntax--definition syntax--string syntax--begin syntax--yaml">'</span>3.7.7<span class="syntax--punctuation syntax--definition syntax--string syntax--end syntax--yaml">'</span></span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> 
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Install dependencies</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">run</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--block syntax--yaml">|
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+</span>      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Test with pytest</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">run</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--block syntax--yaml">|
+          cd app/
+          pytest</span></span></pre>
+<p>Finally you need to specify the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">steps</code> for this action to be completed. This is a sequence of commands to achieve the functionality you strive for.  <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">steps</code> have several values associated such as:</p>
+<ul>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">name</code>: The name of the step.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">uses</code>: You can specify an already existing <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Action</code> as an step on one of your own. This is pretty cool because it allows for reutilization of Actions.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">run</code>: Instead of using an existing Action you might need to run a command. Since you are using <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">bash</code> inside a Linux VM, these commands should follow the correct syntax.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">with</code>: You might need to specify some additional values. This field is for such cases.</p>
+</li>
+</ul>
+<p>Let’s understand every step in order:</p>
+<ul>
+<li>
+<p>The first step uses the <a href="https://github.com/actions/checkout"><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">actions/checkout@v2</code></a> Action. This is usually included in every Action since it allows GitHub to access or check-out your repo.</p>
+</li>
+<li>
+<p>Now that your repo has been checked-out, you need to set an environment capable of running your Python code. To accomplish this the <a href="https://github.com/actions/setup-python"><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">actions/setup-python@v2</code></a> Actions is used while specifying the desired Python version.</p>
+</li>
+<li>
+<p>Having a Python supported environment it is time to install of the dependencies that your application needs. You can do so by using upgrading <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">pip</code> and then using it to install the dependencies listed in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">requirements.txt</code> file.</p>
+</li>
+<li>
+<p>Finally you can run your unit tests by simply using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">pytest</code> command. Notice that you needed to <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd</code> into the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">app</code> directory first.</p>
+</li>
+</ul>
+<p>Now that you have a better sense of how to configure Actions it is time to put them to test.</p>
+<h2>Testing the CI/CD pipeline</h2>
+<p>Within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">app</code> directory a copy of the server that serves predictions for the Wine dataset (that you used in a previous ungraded lab) is provided. The file is the same as in that previous lab with the exception that the classifier is loaded directly into global state instead of within a function that runs when the server is started. This is done because you will be performing unit tests on the classifier without starting the server.</p>
+<h3>Unit testing with pytest</h3>
+<p>To perform unit testing you will use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">pytest</code> library. When using this library you should place your tests within a Python script that starts with the prefix <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">test_</code>, in this case it is called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">test_clf.py</code> as you will be testing the classifier.</p>
+<p>Let’s take a look at the contents of this file:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">import</span> pickle
+<span class="syntax--keyword syntax--control">from</span> main <span class="syntax--keyword syntax--control">import</span> clf
+
+<span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">test_accuracy</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+
+    <span class="syntax--comment syntax--line"># Load test data</span>
+    <span class="syntax--keyword syntax--control">with</span> <span class="syntax--support syntax--function syntax--call">open</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--string syntax--quoted">"data/test_data.pkl"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--string syntax--quoted">"rb"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span> <span class="syntax--keyword syntax--control">as</span> file:
+        test_data <span class="syntax--keyword syntax--operator">=</span> pickle.<span class="syntax--entity syntax--name syntax--function">load</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>file<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+
+    <span class="syntax--comment syntax--line"># Unpack the tuple</span>
+    X_test<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> y_test <span class="syntax--keyword syntax--operator">=</span> test_data
+
+    <span class="syntax--comment syntax--line"># Compute accuracy of classifier</span>
+    acc <span class="syntax--keyword syntax--operator">=</span> clf.<span class="syntax--entity syntax--name syntax--function">score</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>X_test<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> y_test<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+
+    <span class="syntax--comment syntax--line"># Accuracy should be over 90%</span>
+    <span class="syntax--keyword syntax--other">assert</span> acc <span class="syntax--keyword syntax--operator">&gt;</span> <span class="syntax--constant syntax--numeric">0.9</span></span></pre>
+<p>There is only one unit test defined in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">test_accuracy</code> function. This function loads the test data that was saved in pickle format and is located in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">data/test_data.pkl</code> file. Then it uses this data to compute the accuracy of the classifier on this test data. Something important is that this data is <strong>not scaled</strong> as the test expects the classifier to be a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">sklearn.pipeline.Pipeline</code> which first step is a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">sklearn.preprocessing.StandardScaler</code>.</p>
+<p>If the accuracy is greater than 90% then the test passes. Otherwise it fails.</p>
+<h2>Running the GitHub Action</h2>
+<p>To run the unit test using the CI/CD pipeline you need to push some changes to the remote repository. To do this, <strong>add a comment somewhere in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">main.py</code> file and save the changes</strong>.</p>
+<p>Now you will use git to push changes to the remote version of your fork.</p>
+<ul>
+<li>
+<p>Begin by checking that there was a change using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git status</code> command. You should see <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">main.py</code> in the list that is outputted.</p>
+</li>
+<li>
+<p>Now stage all of the changes by using the command <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git add --all</code>.</p>
+</li>
+<li>
+<p>Create a commit with the command <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git commit -m "Testing the CI/CD pipeline"</code>.</p>
+</li>
+<li>
+<p>Finally push the changes using the command <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git push origin main</code>.</p>
+</li>
+</ul>
+<p>With the push the CI/CD pipeline should have been triggered. To see it in action visit your forked repo in a browser and click the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Actions</code> button.</p>
+<p>Here you will see all of the runs of the workflows you have set up. Right now you should see a run that looks like this (notice that the name is the same as the commit message):</p>
+<p><img src="https://i.imgur.com/VtnWbdv.png" alt="workflow-run"></p>
+<p>You can click on the name of this run to see a summary of the jobs that made it up. If you do so you will see there is only the job <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">test</code> that you defined in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">YAML</code> file:</p>
+<p><img src="https://i.imgur.com/ZbWq0oy.png" alt="job"></p>
+<p>Now you can click once again the job to see a detailed list of all the steps of that job:</p>
+<p><img src="https://i.imgur.com/msIqbKz.png" alt="steps"></p>
+<p>Notice that these steps are the sames you defined in the configuration file plus some automatically added by GitHub.</p>
+<p>This Action takes around 40 seconds to complete so by now it should have finished. Click again on the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Actions</code> button to see the list of workflow runs and you should see the run accompanied by a green icon showing that all tests passed successfully:</p>
+<p><img src="https://i.imgur.com/NyNMOeM.png" alt="good-run"></p>
+<p>You just run your own CI/CD pipeline! Pretty cool!</p>
+<h2>Running the pipeline more times</h2>
+<h3>Changing the code</h3>
+<p>Suppose a teammate tells you that the Data Science team has developed a new model with an accuracy of 95% (the current one has 91%) so you decide to use new model instead. It is found in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">models/wine-95.pkl</code> file so to use it in your webserver you need to modify <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">main.py</code>. You should change the following lines:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">with</span> <span class="syntax--support syntax--function syntax--call">open</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--string syntax--quoted">"models/wine.pkl"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--string syntax--quoted">"rb"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span> <span class="syntax--keyword syntax--control">as</span> file:
+    clf <span class="syntax--keyword syntax--operator">=</span> pickle.<span class="syntax--entity syntax--name syntax--function">load</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>file<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span></pre>
+<p>So they look like this:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">with</span> <span class="syntax--support syntax--function syntax--call">open</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--string syntax--quoted">"models/wine-95.pkl"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--string syntax--quoted">"rb"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span> <span class="syntax--keyword syntax--control">as</span> file:
+    clf <span class="syntax--keyword syntax--operator">=</span> pickle.<span class="syntax--entity syntax--name syntax--function">load</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>file<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span></pre>
+<p>Once the change is saved, use git to push the changes as before. Use the following commands in sequence:</p>
+<ul>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git add --all</code></li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git commit -m "Adding new classifier"</code></li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git push origin main</code></li>
+</ul>
+<p>With the push the CI/CD pipeline should have been triggered again. Once again go into the browser and check it. This time you will find that the tests failed. This can be done by the red icon next to the run:</p>
+<p><img src="https://i.imgur.com/V6tG3eX.png" alt="bad-run"></p>
+<p>So, what happened?
+You can dig deeper by going into the job and then into the steps that made it up. You should see something like this:</p>
+<p><img src="https://i.imgur.com/IR9ecly.png" alt="error-detail"></p>
+<p>The unit test failed because this new model has an accuracy lower to 90%. This happened because due to some miscommunication between teams, the Data Science team did not provide a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">sklearn.pipeline.Pipeline</code> which first step is a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">sklearn.preprocessing.StandardScaler</code>, but only the model since they expected the test data to be already scaled.</p>
+<h3>Changing the code again</h3>
+<p>With this in mind you ask them to provide the model with the required characteristics. This one  is found in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">models/wine-95-fixed.pkl</code> file so to use it  you need to modify <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">main.py</code> once again. You should change the following lines:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">with</span> <span class="syntax--support syntax--function syntax--call">open</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--string syntax--quoted">"models/wine-95.pkl"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--string syntax--quoted">"rb"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span> <span class="syntax--keyword syntax--control">as</span> file:
+    clf <span class="syntax--keyword syntax--operator">=</span> pickle.<span class="syntax--entity syntax--name syntax--function">load</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>file<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span></pre>
+<p>So they look like this:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">with</span> <span class="syntax--support syntax--function syntax--call">open</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--string syntax--quoted">"models/wine-95-fixed.pkl"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--string syntax--quoted">"rb"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span> <span class="syntax--keyword syntax--control">as</span> file:
+    clf <span class="syntax--keyword syntax--operator">=</span> pickle.<span class="syntax--entity syntax--name syntax--function">load</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>file<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span></pre>
+<p>You also decided to add a new unit test to catch this error explicitly if it happens again. To do so modify the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">test_clf.py</code> file to include these imports:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">from</span> sklearn.pipeline <span class="syntax--keyword syntax--control">import</span> Pipeline
+<span class="syntax--keyword syntax--control">from</span> sklearn.preprocessing <span class="syntax--keyword syntax--control">import</span> StandardScaler</span></pre>
+<p>And add a new unit test that looks like this:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">test_pipeline_and_scaler</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+
+    <span class="syntax--comment syntax--line"># Check if clf is an instance of sklearn.pipeline.Pipeline </span>
+    isPipeline <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--support syntax--function syntax--call">isinstance</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>clf<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> Pipeline<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+    <span class="syntax--keyword syntax--other">assert</span> isPipeline
+    
+    <span class="syntax--keyword syntax--control">if</span> isPipeline:
+        <span class="syntax--comment syntax--line"># Check if first step of pipeline is an instance of </span>
+        <span class="syntax--comment syntax--line"># sklearn.preprocessing.StandardScaler</span>
+        firstStep <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span>v <span class="syntax--keyword syntax--control">for</span> v <span class="syntax--keyword syntax--operator syntax--logical syntax--python">in</span> clf.<span class="syntax--variable syntax--other syntax--object syntax--property">named_steps</span>.<span class="syntax--entity syntax--name syntax--function">values</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span><span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--constant syntax--numeric">0</span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span>
+        <span class="syntax--keyword syntax--other">assert</span> <span class="syntax--support syntax--function syntax--call">isinstance</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>firstStep<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> StandardScaler<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span></pre>
+<p>This new test will check that the classifier is of type <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">sklearn.pipeline.Pipeline</code> and that its first step is a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">sklearn.preprocessing.StandardScaler</code>.</p>
+<p>Once the change is saved, use git to push the changes as before. Use the following commands in sequence:</p>
+<ul>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git add --all</code></li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git commit -m "Adding new classifier with scaling"</code></li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">git push origin main</code></li>
+</ul>
+<p>Now all of the tests should pass! With this you can be sure that this new version of the model is working as expected.</p>
+<hr>
+<p><strong>Congratulations on finishing this ungraded lab!</strong></p>
+<p>In this lab you saw what GitHub Actions is, how it can be configured and how it can be used to run CI/CD pipelines. This topic is very cool since it automates many repetitive processes such as running unit tests to ensure the quality of the software you are shipping.</p>
+<p>These pipelines are meant to run really quickly so you can iterate your code in an agile and safe way.</p>
+<p><strong>Keep it up!</strong></p>
+
+  </body>
+</html>

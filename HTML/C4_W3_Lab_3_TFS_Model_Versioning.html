@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html data-markdown-preview-plus-context="html-export">
+  <head>
+    <meta charset="utf-8" />
+    <title>C4_W3_Lab_3_TFS_Model_Versioning</title><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    extensions: ["[a11y]/accessibility-menu.js"],
+    'HTML-CSS': {
+      availableFonts: [],
+      webFont: 'TeX',
+      undefinedFamily: "serif",
+      mtextFontInherit: true,
+    },
+    TeX: {
+  "extensions": [
+    "AMSmath.js",
+    "AMSsymbols.js",
+    "noErrors.js",
+    "noUndefined.js"
+  ],
+  "Macros": {},
+  "equationNumbers": {}
+},
+    showMathMenu: true
+  });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js"></script>
+    <style>.emoji {
+  max-width: 1em !important;
+}
+del {
+  text-decoration: none;
+  position: relative;
+}
+del::after {
+  border-bottom: 1px solid black;
+  content: '';
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+ul.contains-task-list li.task-list-item {
+  position: relative;
+  list-style-type: none;
+}
+ul.contains-task-list li.task-list-item input.task-list-item-checkbox {
+  position: absolute;
+  transform: translateX(-100%);
+  width: 26px;
+}
+span.critic.comment {
+  position: relative;
+}
+span.critic.comment::before {
+  content: '\1f4ac';
+  position: initial;
+}
+span.critic.comment > span {
+  display: none;
+}
+span.critic.comment:hover > span {
+  display: initial;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: 1px solid;
+  border-radius: 5px;
+  max-height: 4em;
+  overflow: auto;
+}
+span.critic.comment:focus > span {
+  display: initial;
+  text-decoration: underline;
+  position: initial;
+  top: auto;
+  left: auto;
+  border: initial;
+  border-radius: initial;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: transparent;
+}
+
+body {
+  overflow: initial !important;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  line-height: 1.6;
+  word-wrap: break-word;
+  padding: 30px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+}
+body > *:first-child {
+  margin-top: 0 !important;
+}
+body > *:last-child {
+  margin-bottom: 0 !important;
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+body .absent {
+  color: #c00;
+}
+body .anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+body .anchor:focus {
+  outline: none;
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  padding-left: 8px;
+  margin-left: -30px;
+  text-decoration: none;
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  display: inline-block;
+}
+body h1 tt,
+body h2 tt,
+body h3 tt,
+body h4 tt,
+body h5 tt,
+body h6 tt,
+body h1 code,
+body h2 code,
+body h3 code,
+body h4 code,
+body h5 code,
+body h6 code {
+  font-size: inherit;
+}
+body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+body h1 .anchor {
+  line-height: 1;
+}
+body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+body h2 .anchor {
+  line-height: 1;
+}
+body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+body h3 .anchor {
+  line-height: 1.2;
+}
+body h4 {
+  font-size: 1.25em;
+}
+body h4 .anchor {
+  line-height: 1.2;
+}
+body h5 {
+  font-size: 1em;
+}
+body h5 .anchor {
+  line-height: 1.1;
+}
+body h6 {
+  font-size: 1em;
+  color: #777;
+}
+body h6 .anchor {
+  line-height: 1.1;
+}
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+body ul,
+body ol {
+  padding-left: 2em;
+}
+body ul.no-list,
+body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+body ul ul,
+body ul ol,
+body ol ol,
+body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+body li > p {
+  margin-top: 16px;
+}
+body dl {
+  padding: 0;
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+body blockquote > :first-child {
+  margin-top: 0;
+}
+body blockquote > :last-child {
+  margin-bottom: 0;
+}
+body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+body table th {
+  font-weight: bold;
+}
+body table th,
+body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body .emoji {
+  max-width: none;
+}
+body span.frame {
+  display: block;
+  overflow: hidden;
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+body span.frame span img {
+  display: block;
+  float: left;
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #333;
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+body span.float-left span {
+  margin: 13px 0 0;
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+body code,
+body tt {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+}
+body code:before,
+body tt:before,
+body code:after,
+body tt:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+body code br,
+body tt br {
+  display: none;
+}
+body del code {
+  text-decoration: inherit;
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+body .highlight {
+  margin-bottom: 16px;
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+body pre {
+  word-wrap: normal;
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+body pre code:before,
+body pre tt:before,
+body pre code:after,
+body pre tt:after {
+  content: normal;
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+span.critic.comment > span {
+  background-color: #fff;
+}
+a {
+  color: #337ab7;
+}
+
+.bracket-matcher .region {
+  border-bottom: 1px dotted lime;
+  position: absolute;
+}
+.line-number.bracket-matcher.bracket-matcher {
+  color: #c5c8c6;
+  background-color: #373b41;
+}
+
+pre.editor-colors {
+  background-color: #1d1f21;
+  color: #c5c8c6;
+}
+pre.editor-colors .wrap-guide {
+  background-color: #4f5256;
+}
+pre.editor-colors .indent-guide {
+  color: #4f5256;
+}
+pre.editor-colors .invisible-character {
+  color: #4f5256;
+}
+pre.editor-colors .gutter {
+  background-color: #1d1f21;
+  color: #969896;
+}
+pre.editor-colors .gutter .line-number {
+  padding: 0 0.25em 0 0.5em;
+  -webkit-font-smoothing: antialiased;
+}
+pre.editor-colors .gutter .line-number.cursor-line {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.cursor-line-no-selection {
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.folded,
+pre.editor-colors .gutter .line-number:after,
+pre.editor-colors .fold-marker:after {
+  color: #969896;
+}
+pre.editor-colors .invisible {
+  color: #c5c8c6;
+}
+pre.editor-colors .cursor {
+  color: #ffffff;
+}
+pre.editor-colors .selection .region {
+  background-color: #373b41;
+}
+pre.editor-colors .bracket-matcher .region {
+  border-color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment .syntax--markup.syntax--link {
+  color: #969896;
+}
+.syntax--entity.syntax--name.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--other.syntax--inherited-class {
+  color: #b5bd68;
+}
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--control {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--operator {
+  color: #c5c8c6;
+}
+.syntax--keyword.syntax--other.syntax--special-method {
+  color: #81a2be;
+}
+.syntax--keyword.syntax--other.syntax--unit {
+  color: #de935f;
+}
+.syntax--storage {
+  color: #b294bb;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--constant.syntax--other.syntax--color {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--other.syntax--symbol {
+  color: #8abeb7;
+}
+.syntax--variable {
+  color: #cc6666;
+}
+.syntax--variable.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--variable.syntax--parameter.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--invalid.syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp {
+  color: #8abeb7;
+}
+.syntax--string.syntax--regexp .syntax--source.syntax--ruby.syntax--embedded {
+  color: #f0c674;
+}
+.syntax--string.syntax--other.syntax--link {
+  color: #cc6666;
+}
+.syntax--punctuation.syntax--definition.syntax--parameters,
+.syntax--punctuation.syntax--definition.syntax--array {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--definition.syntax--heading,
+.syntax--punctuation.syntax--definition.syntax--identity {
+  color: #81a2be;
+}
+.syntax--punctuation.syntax--definition.syntax--bold {
+  color: #f0c674;
+  font-weight: bold;
+}
+.syntax--punctuation.syntax--definition.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--punctuation.syntax--section.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--punctuation.syntax--section.syntax--method,
+.syntax--punctuation.syntax--section.syntax--class,
+.syntax--punctuation.syntax--section.syntax--inner-class {
+  color: #c5c8c6;
+}
+.syntax--support.syntax--class {
+  color: #f0c674;
+}
+.syntax--support.syntax--function {
+  color: #8abeb7;
+}
+.syntax--support.syntax--function.syntax--any-method {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--class,
+.syntax--entity.syntax--name.syntax--type.syntax--class {
+  color: #f0c674;
+}
+.syntax--entity.syntax--name.syntax--section {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--other.syntax--attribute-name {
+  color: #de935f;
+}
+.syntax--entity.syntax--other.syntax--attribute-name.syntax--id {
+  color: #81a2be;
+}
+.syntax--meta.syntax--class {
+  color: #f0c674;
+}
+.syntax--meta.syntax--class.syntax--body {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--link {
+  color: #de935f;
+}
+.syntax--meta.syntax--method-call,
+.syntax--meta.syntax--method {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--require {
+  color: #81a2be;
+}
+.syntax--meta.syntax--selector {
+  color: #b294bb;
+}
+.syntax--meta.syntax--separator {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--tag {
+  color: #c5c8c6;
+}
+.syntax--none {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--heading .syntax--punctuation.syntax--definition.syntax--heading {
+  color: #81a2be;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--quote {
+  color: #de935f;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--source.syntax--gfm .syntax--markup {
+  -webkit-font-smoothing: auto;
+}
+.syntax--source.syntax--gfm .syntax--link .syntax--entity {
+  color: #8abeb7;
+}
+.syntax--source.syntax--cs .syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation.syntax--string {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--constant.syntax--language.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--constant.syntax--language.syntax--json {
+  color: #8abeb7;
+}
+/*
+   This defines styling rules for syntax classes.
+
+   See the naming conventions for a list of syntax classes:
+   https://flight-manual.atom.io/hacking-atom/sections/syntax-naming-conventions
+
+   When styling rules conflict:
+   - The last rule overrides previous rules.
+   - The rule with most classes and pseudo-classes overrides the last rule.
+*/
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--storage {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--type {
+  color: #f0c674;
+}
+.syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--function {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--variable {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--support {
+  color: #cc6666;
+}
+.syntax--entity.syntax--decorator:last-child {
+  color: #81a2be;
+}
+.syntax--entity.syntax--label {
+  text-decoration: underline;
+}
+.syntax--entity.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--entity.syntax--operator {
+  color: #81a2be;
+}
+.syntax--entity.syntax--operator.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--attribute {
+  color: #de935f;
+}
+.syntax--punctuation {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--immutable {
+  color: #b5bd68;
+}
+.syntax--string.syntax--part {
+  color: #8abeb7;
+}
+.syntax--string.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--string.syntax--regexp {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp.syntax--language {
+  color: #b294bb;
+}
+.syntax--string.syntax--regexp.syntax--variable {
+  color: #81a2be;
+}
+.syntax--string.syntax--regexp.syntax--punctuation {
+  color: #a3685a;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--code {
+  color: #8abeb7;
+}
+.syntax--text {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--list.syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--alt {
+  color: #8abeb7;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--deleted .syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--changed .syntax--punctuation {
+  color: #b294bb;
+}
+.syntax--markup.syntax--commented {
+  color: #969896;
+}
+.syntax--markup.syntax--commented .syntax--punctuation {
+  color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment.syntax--caption {
+  color: #9ea09e;
+  font-weight: bold;
+}
+.syntax--comment.syntax--term {
+  color: #a8aaa8;
+}
+.syntax--comment.syntax--punctuation {
+  color: #969896;
+  font-weight: normal;
+}
+.syntax--invalid:not(.syntax--punctuation).syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--tag {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--property {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--variable {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--keyframe {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--constant {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--media {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset.syntax--unit {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--attribute-value {
+  color: #b5bd68;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--wildcard {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--attribute {
+  color: #c5c8c6;
+}
+
+/*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed and saved.
+ *
+ * Add your own CSS or Less to fully customize Atom.
+ * If you are unfamiliar with Less, you can read more about it here:
+ * http://lesscss.org
+ */
+/*
+ * Examples
+ * (To see them, uncomment and save)
+ */
+</style>
+
+  </head>
+  <body>
+    <h1>Week 3 Ungraded Lab: Model versioning with Tensorflow Serving and Docker</h1>
+<p>Welcome! During this lab you will take a look at how to version models using TFS. This topic is very important because models usually change over time and you need a way to control the version that is live for most users while being able to work on newer versions. Other uses of this are canary deployment or A/B testing.</p>
+<p>Before going forward make sure you have the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">tensorflow/serving:latest</code> Docker image in your local machine. You can do so by using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker images</code> command. If the image does not appear in the list you can download it using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker pull tensorflow/serving</code> command.</p>
+<p>Open a terminal and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd</code> into the directory that contains the files needed by this lab. Assuming you are on the root of the repo you can use the command <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd course4/week3-ungraded-labs/C4_W3_Lab_3_TFS_Model_Versioning</code>.</p>
+<p>Let’s get started!</p>
+<hr>
+<h2>Download the models</h2>
+<p>During Course 1 of this specialization you trained a model to classify cats, dogs and birds with 3 different datasets resulting in 3 different models, these were:</p>
+<ul>
+<li>One with imbalanced classes</li>
+<li>One with balanced classes</li>
+<li>One with balanced classes and data augmentation</li>
+</ul>
+<p>These models were saved using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">SavedModel</code> format so everyone has these files:</p>
+<ul>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">variables</code>: a directory containing information about the training checkpoints of the model.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">saved_model.pb</code>: the protobuf file that represents the actual TF program.</li>
+</ul>
+<p>To download these models into your local machine you can use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">setup.sh</code> file provided.</p>
+<p>First you want to make it executable using the command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">chmod</span> +x setup.sh</span></pre>
+<p>And to run it use:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">./setup.sh</span></span></pre>
+<p>This process should not take longer than a minute. After it is completed the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">models</code> directory should look like this:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">models
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">├── models.config
+    └── animals
+</span>        <span class="syntax--meta syntax--paragraph syntax--text">├── 1/
+        │   ├── variables/
+        │   └── saved_model.pb
+        ├── 2/
+        │   ├── variables/
+        │   └── saved_model.pb
+        └── 3/
+</span>            <span class="syntax--meta syntax--paragraph syntax--text">├── variables/
+            └── saved_model.pb</span></span></pre>
+<p>In this case <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">animals</code> is the name of the model and every subdirectory within this directory represents a version of this model. <strong>Notice that TFS expects the versioning to be done with integers and not strings.</strong></p>
+<p>By default, TFS serves whatever version of your model has the higher number since it is considered to be the latest version of it. This can be undesired in some cases so TFS also allows some flexibility through the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">models.config</code> configuration file.</p>
+<p>In this case the versioning works like this:</p>
+<ul>
+<li>Version 1: imbalanced classes</li>
+<li>Version 2: balanced classes</li>
+<li>Version 3: balanced classes and data augmentation</li>
+</ul>
+<h2>Understanding <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">models.config</code></h2>
+<p>You can specify the desired configuration for how you want TFS to host your model versions via the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">models.config</code> file.</p>
+<p>Let’s take a look at the elements of this file:</p>
+<pre class="editor-colors lang-config" style="tab-size: 4;"><span class="syntax--text syntax--plain syntax--null-grammar">model_config_list {</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">  config {</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">    name: 'animals'</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">    base_path: '/models/animals/'</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">    model_platform: 'tensorflow'</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">  }</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">}</span></pre>
+<p>You will always have to have a structure similar to the one above. <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">model_config_list</code> should be defined in the outermost scope and within it you should specify a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">config</code> scope for every model you want to host. In this case you only have one model so there is a single one. Within this scope you can see  values assigned to some variables, let’s break it down:</p>
+<ul>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">name</code>: Stands for the name of your model. In this case it is <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">animals</code>.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">base_path</code>: Stands for path where your model is going to be. Since you will use TFS with Docker you will set this path to <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">/models/animals/</code>.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">model_platform</code>: Stands for the format of your model. In this case it is <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">tensorflow</code>.</p>
+</li>
+</ul>
+<p>Until now you have not provided any custom configuration but by adding more information to this file you can customize things like which versions of the model are going to be served. You will be serving the 3 versions so you will need to add this within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">config</code> scope:</p>
+<pre class="editor-colors lang-config" style="tab-size: 4;"><span class="syntax--text syntax--plain syntax--null-grammar">    model_version_policy {</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">        specific {</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">            versions: 1</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">            versions: 2</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">            versions: 3</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">          }</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">        }</span></pre>
+<p>Now all versions of the model will be served. This is cool but you still need to remember what every version is supposed to be. To account for this you can also define labels for each version by adding this:</p>
+<pre class="editor-colors lang-config" style="tab-size: 4;"><span class="syntax--text syntax--plain syntax--null-grammar">    version_labels {</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">        key: 'deprecated'</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">        value: 1</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">    }</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">    version_labels {</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">        key: 'stable'</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">        value: 2</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">    }</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">    version_labels {</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">        key: 'canary'</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">        value: 3</span>
+<span class="syntax--text syntax--plain syntax--null-grammar">    }</span></pre>
+<p>Now that you assigned labels it is much easier to remember what every version represents:</p>
+<ul>
+<li>
+<p>Version 1 was the first iteration of the model and yielded poor results and has been deprecated.</p>
+</li>
+<li>
+<p>Version 2 is the stable version of the classifier.</p>
+</li>
+<li>
+<p>Version 3 has some new features to yield better results than the stable version so it is used for canary deployment.</p>
+</li>
+</ul>
+<p>To check the whole file be sure to look at it within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">models</code> directory.</p>
+<h2>Serving the models</h2>
+<p>Now that you understand how the configuration file works it is time to serve the models using TFS and Docker. You can do so using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker run</code> command as you saw on a past ungraded lab:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> run <span class="syntax--entity syntax--other syntax--attribute-name">-t</span> <span class="syntax--entity syntax--other syntax--attribute-name">--rm</span>  <span class="syntax--entity syntax--other syntax--attribute-name">-p</span> 8501:8501 \
+<span class="syntax--entity syntax--other syntax--attribute-name">--mount</span> type=bind,source=<span class="syntax--string">"<span class="syntax--embedded syntax--source">$(<span class="syntax--entity syntax--name syntax--function">pwd</span>)</span>/models"</span>,target=/models/ tensorflow/serving \
+<span class="syntax--entity syntax--other syntax--attribute-name">--model_config_file=/models/models.config</span> \
+<span class="syntax--entity syntax--other syntax--attribute-name">--model_config_file_poll_wait_seconds=60</span> \
+<span class="syntax--entity syntax--other syntax--attribute-name">--allow_version_labels_for_unavailable_models=true</span></span></pre>
+<p>By now you should understand the meaning of the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-t</code>, <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--rm</code>, <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-p</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--mount</code> flags. In case you need a refresh let’s revisit them:</p>
+<ul>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-t</code>: Attaches a pseudo-terminal to the container so you can check what is being printed in the standard streams of the container. This will allow you to see the logs printed out by TFS.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--rm</code>: Delete this container after stopping running it. This is to avoid having to manually delete the container. Deleting unused containers helps your system to stay clean and tidy.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-p 8501:8501</code>: Maps port 8501 within the container to port 8501 in your machine.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--mount type=bind,source="$(pwd)/models",target=/models/</code> : This flag allows you to mount a directory in your pc to a directory within the container. In this case this is done because you need TFS to have access to your model and config files within the container but you want to avoid creating a new image that already has those files.</p>
+</li>
+</ul>
+<p>All of these are Docker flags but what about the ones after the image name? These are TFS flags and because of this they need to be specified after the image name. Those you haven’t seen in a previous lab so let’s break them down:</p>
+<ul>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--model_config_file</code>: This flag expects the path of the configuration file within the container. In this case the path is <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">/models/models.config</code>.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--model_config_file_poll_wait_seconds</code>: This flag controls how much time TFS will wait before checking for changes in the configuration file. In this case it is set to <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">60</code> seconds. This is specified so you can make changes to the config file and see the results.</p>
+</li>
+<li>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--allow_version_labels_for_unavailable_models</code>: By default TFS does not allow labelling of models that are not ready to serve. So usually you had to avoid including the labels in the config file and spin up the container (otherwise you’ll get an error) and after the models were loaded for serving you could edit the config file to include labels. By setting this flag to <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">true</code> you avoid having to do this.</p>
+</li>
+</ul>
+<p>After running the above command your models should be ready to be used for prediction. Nice job!</p>
+<h2>Consuming the models</h2>
+<p>To test the different model versions you can use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">dog_example.json</code> file that is provided. This file contains an example of a dog image serialized as JSON.</p>
+<p>Since you defined labels for the versions of the models you can consume them either by using numerical versioning or labels.</p>
+<p>Begin by sending a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">POST</code> request to version 1 of the model:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">curl</span> <span class="syntax--entity syntax--other syntax--attribute-name">-X</span> POST http://localhost:8501/v1/models/animals/versions/2:predict \
+    <span class="syntax--entity syntax--other syntax--attribute-name">-d</span> @./dog_example.json \
+    <span class="syntax--entity syntax--other syntax--attribute-name">-H</span> <span class="syntax--string">"Content-Type: application/json"</span></span></pre>
+<p>This request should provide a response that includes the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">softmax</code> score for each of the classes. Remember that class 0 is for birds, 1 for cats and 2 for dogs.</p>
+<p>Now ask for a prediction to the same model but this time using labels instead of versions. Notice that the URL changes slightly:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">curl</span> <span class="syntax--entity syntax--other syntax--attribute-name">-X</span> POST http://localhost:8501/v1/models/animals/labels/stable:predict \
+    <span class="syntax--entity syntax--other syntax--attribute-name">-d</span> @./dog_example.json \
+    <span class="syntax--entity syntax--other syntax--attribute-name">-H</span> <span class="syntax--string">"Content-Type: application/json"</span></span></pre>
+<p>Since the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">stable</code> model is the same as <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">version 2</code> you should see the same values you got from the previous requests.</p>
+<p>Now try out other versions and labels and see what you get. You can also try deleting version 1 from the config file and see how TFS will fail to load this model now.</p>
+<h2>Stopping the server</h2>
+<p>Finally you will learn how to stop the server running within the Docker container. In this case to stop the container is equivalent to stopping the server, to do so, run the following command to see all of the running Docker processes (or containers):</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> ps</span></pre>
+<p>This will display some relevant information for each running docker process. If you want to also check this information for stopped containers use the flag <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-a</code>.</p>
+<p>Docker automatically assigns a unique name to each container and this can be seen with the above command which should yield an output similar to this:</p>
+<p><img src="https://i.imgur.com/3I3cBYI.png" alt="container_name"></p>
+<p>To stop a container simply use the command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> stop container_name</span></pre>
+<p>In this case the command will be:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> stop laughing_yonath</span></pre>
+<p>After some seconds you should see that the process exited on the terminal that you spined up the container.</p>
+<hr>
+<p><strong>Congratulations on finishing this ungraded lab!</strong></p>
+<p>Now you should have a better sense of how TFS and Docker can be leveraged to serve your Machine Learning models by providing you with the option to serve specific versions of those models. You also saw that although TFS uses numerical versioning by default, it allows you to set labels to each version so it is easier to keep track of what you are serving.</p>
+<p><strong>Keep it up!</strong></p>
+
+  </body>
+</html>

@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html data-markdown-preview-plus-context="html-export">
+  <head>
+    <meta charset="utf-8" />
+    <title>C4_W2_Lab_2_Intro_to_Kubernetes</title><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    extensions: ["[a11y]/accessibility-menu.js"],
+    'HTML-CSS': {
+      availableFonts: [],
+      webFont: 'TeX',
+      undefinedFamily: "serif",
+      mtextFontInherit: true,
+    },
+    TeX: {
+  "extensions": [
+    "AMSmath.js",
+    "AMSsymbols.js",
+    "noErrors.js",
+    "noUndefined.js"
+  ],
+  "Macros": {},
+  "equationNumbers": {}
+},
+    showMathMenu: true
+  });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js"></script>
+    <style>.emoji {
+  max-width: 1em !important;
+}
+del {
+  text-decoration: none;
+  position: relative;
+}
+del::after {
+  border-bottom: 1px solid black;
+  content: '';
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+ul.contains-task-list li.task-list-item {
+  position: relative;
+  list-style-type: none;
+}
+ul.contains-task-list li.task-list-item input.task-list-item-checkbox {
+  position: absolute;
+  transform: translateX(-100%);
+  width: 26px;
+}
+span.critic.comment {
+  position: relative;
+}
+span.critic.comment::before {
+  content: '\1f4ac';
+  position: initial;
+}
+span.critic.comment > span {
+  display: none;
+}
+span.critic.comment:hover > span {
+  display: initial;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: 1px solid;
+  border-radius: 5px;
+  max-height: 4em;
+  overflow: auto;
+}
+span.critic.comment:focus > span {
+  display: initial;
+  text-decoration: underline;
+  position: initial;
+  top: auto;
+  left: auto;
+  border: initial;
+  border-radius: initial;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: transparent;
+}
+
+body {
+  overflow: initial !important;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  line-height: 1.6;
+  word-wrap: break-word;
+  padding: 30px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+}
+body > *:first-child {
+  margin-top: 0 !important;
+}
+body > *:last-child {
+  margin-bottom: 0 !important;
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+body .absent {
+  color: #c00;
+}
+body .anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+body .anchor:focus {
+  outline: none;
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  padding-left: 8px;
+  margin-left: -30px;
+  text-decoration: none;
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  display: inline-block;
+}
+body h1 tt,
+body h2 tt,
+body h3 tt,
+body h4 tt,
+body h5 tt,
+body h6 tt,
+body h1 code,
+body h2 code,
+body h3 code,
+body h4 code,
+body h5 code,
+body h6 code {
+  font-size: inherit;
+}
+body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+body h1 .anchor {
+  line-height: 1;
+}
+body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+body h2 .anchor {
+  line-height: 1;
+}
+body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+body h3 .anchor {
+  line-height: 1.2;
+}
+body h4 {
+  font-size: 1.25em;
+}
+body h4 .anchor {
+  line-height: 1.2;
+}
+body h5 {
+  font-size: 1em;
+}
+body h5 .anchor {
+  line-height: 1.1;
+}
+body h6 {
+  font-size: 1em;
+  color: #777;
+}
+body h6 .anchor {
+  line-height: 1.1;
+}
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+body ul,
+body ol {
+  padding-left: 2em;
+}
+body ul.no-list,
+body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+body ul ul,
+body ul ol,
+body ol ol,
+body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+body li > p {
+  margin-top: 16px;
+}
+body dl {
+  padding: 0;
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+body blockquote > :first-child {
+  margin-top: 0;
+}
+body blockquote > :last-child {
+  margin-bottom: 0;
+}
+body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+body table th {
+  font-weight: bold;
+}
+body table th,
+body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body .emoji {
+  max-width: none;
+}
+body span.frame {
+  display: block;
+  overflow: hidden;
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+body span.frame span img {
+  display: block;
+  float: left;
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #333;
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+body span.float-left span {
+  margin: 13px 0 0;
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+body code,
+body tt {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+}
+body code:before,
+body tt:before,
+body code:after,
+body tt:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+body code br,
+body tt br {
+  display: none;
+}
+body del code {
+  text-decoration: inherit;
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+body .highlight {
+  margin-bottom: 16px;
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+body pre {
+  word-wrap: normal;
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+body pre code:before,
+body pre tt:before,
+body pre code:after,
+body pre tt:after {
+  content: normal;
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+span.critic.comment > span {
+  background-color: #fff;
+}
+a {
+  color: #337ab7;
+}
+
+.bracket-matcher .region {
+  border-bottom: 1px dotted lime;
+  position: absolute;
+}
+.line-number.bracket-matcher.bracket-matcher {
+  color: #c5c8c6;
+  background-color: #373b41;
+}
+
+pre.editor-colors {
+  background-color: #1d1f21;
+  color: #c5c8c6;
+}
+pre.editor-colors .wrap-guide {
+  background-color: #4f5256;
+}
+pre.editor-colors .indent-guide {
+  color: #4f5256;
+}
+pre.editor-colors .invisible-character {
+  color: #4f5256;
+}
+pre.editor-colors .gutter {
+  background-color: #1d1f21;
+  color: #969896;
+}
+pre.editor-colors .gutter .line-number {
+  padding: 0 0.25em 0 0.5em;
+  -webkit-font-smoothing: antialiased;
+}
+pre.editor-colors .gutter .line-number.cursor-line {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.cursor-line-no-selection {
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.folded,
+pre.editor-colors .gutter .line-number:after,
+pre.editor-colors .fold-marker:after {
+  color: #969896;
+}
+pre.editor-colors .invisible {
+  color: #c5c8c6;
+}
+pre.editor-colors .cursor {
+  color: #ffffff;
+}
+pre.editor-colors .selection .region {
+  background-color: #373b41;
+}
+pre.editor-colors .bracket-matcher .region {
+  border-color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment .syntax--markup.syntax--link {
+  color: #969896;
+}
+.syntax--entity.syntax--name.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--other.syntax--inherited-class {
+  color: #b5bd68;
+}
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--control {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--operator {
+  color: #c5c8c6;
+}
+.syntax--keyword.syntax--other.syntax--special-method {
+  color: #81a2be;
+}
+.syntax--keyword.syntax--other.syntax--unit {
+  color: #de935f;
+}
+.syntax--storage {
+  color: #b294bb;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--constant.syntax--other.syntax--color {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--other.syntax--symbol {
+  color: #8abeb7;
+}
+.syntax--variable {
+  color: #cc6666;
+}
+.syntax--variable.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--variable.syntax--parameter.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--invalid.syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp {
+  color: #8abeb7;
+}
+.syntax--string.syntax--regexp .syntax--source.syntax--ruby.syntax--embedded {
+  color: #f0c674;
+}
+.syntax--string.syntax--other.syntax--link {
+  color: #cc6666;
+}
+.syntax--punctuation.syntax--definition.syntax--parameters,
+.syntax--punctuation.syntax--definition.syntax--array {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--definition.syntax--heading,
+.syntax--punctuation.syntax--definition.syntax--identity {
+  color: #81a2be;
+}
+.syntax--punctuation.syntax--definition.syntax--bold {
+  color: #f0c674;
+  font-weight: bold;
+}
+.syntax--punctuation.syntax--definition.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--punctuation.syntax--section.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--punctuation.syntax--section.syntax--method,
+.syntax--punctuation.syntax--section.syntax--class,
+.syntax--punctuation.syntax--section.syntax--inner-class {
+  color: #c5c8c6;
+}
+.syntax--support.syntax--class {
+  color: #f0c674;
+}
+.syntax--support.syntax--function {
+  color: #8abeb7;
+}
+.syntax--support.syntax--function.syntax--any-method {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--class,
+.syntax--entity.syntax--name.syntax--type.syntax--class {
+  color: #f0c674;
+}
+.syntax--entity.syntax--name.syntax--section {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--other.syntax--attribute-name {
+  color: #de935f;
+}
+.syntax--entity.syntax--other.syntax--attribute-name.syntax--id {
+  color: #81a2be;
+}
+.syntax--meta.syntax--class {
+  color: #f0c674;
+}
+.syntax--meta.syntax--class.syntax--body {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--link {
+  color: #de935f;
+}
+.syntax--meta.syntax--method-call,
+.syntax--meta.syntax--method {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--require {
+  color: #81a2be;
+}
+.syntax--meta.syntax--selector {
+  color: #b294bb;
+}
+.syntax--meta.syntax--separator {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--tag {
+  color: #c5c8c6;
+}
+.syntax--none {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--heading .syntax--punctuation.syntax--definition.syntax--heading {
+  color: #81a2be;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--quote {
+  color: #de935f;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--source.syntax--gfm .syntax--markup {
+  -webkit-font-smoothing: auto;
+}
+.syntax--source.syntax--gfm .syntax--link .syntax--entity {
+  color: #8abeb7;
+}
+.syntax--source.syntax--cs .syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation.syntax--string {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--constant.syntax--language.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--constant.syntax--language.syntax--json {
+  color: #8abeb7;
+}
+/*
+   This defines styling rules for syntax classes.
+
+   See the naming conventions for a list of syntax classes:
+   https://flight-manual.atom.io/hacking-atom/sections/syntax-naming-conventions
+
+   When styling rules conflict:
+   - The last rule overrides previous rules.
+   - The rule with most classes and pseudo-classes overrides the last rule.
+*/
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--storage {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--type {
+  color: #f0c674;
+}
+.syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--function {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--variable {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--support {
+  color: #cc6666;
+}
+.syntax--entity.syntax--decorator:last-child {
+  color: #81a2be;
+}
+.syntax--entity.syntax--label {
+  text-decoration: underline;
+}
+.syntax--entity.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--entity.syntax--operator {
+  color: #81a2be;
+}
+.syntax--entity.syntax--operator.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--attribute {
+  color: #de935f;
+}
+.syntax--punctuation {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--immutable {
+  color: #b5bd68;
+}
+.syntax--string.syntax--part {
+  color: #8abeb7;
+}
+.syntax--string.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--string.syntax--regexp {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp.syntax--language {
+  color: #b294bb;
+}
+.syntax--string.syntax--regexp.syntax--variable {
+  color: #81a2be;
+}
+.syntax--string.syntax--regexp.syntax--punctuation {
+  color: #a3685a;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--code {
+  color: #8abeb7;
+}
+.syntax--text {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--list.syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--alt {
+  color: #8abeb7;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--deleted .syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--changed .syntax--punctuation {
+  color: #b294bb;
+}
+.syntax--markup.syntax--commented {
+  color: #969896;
+}
+.syntax--markup.syntax--commented .syntax--punctuation {
+  color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment.syntax--caption {
+  color: #9ea09e;
+  font-weight: bold;
+}
+.syntax--comment.syntax--term {
+  color: #a8aaa8;
+}
+.syntax--comment.syntax--punctuation {
+  color: #969896;
+  font-weight: normal;
+}
+.syntax--invalid:not(.syntax--punctuation).syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--tag {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--property {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--variable {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--keyframe {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--constant {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--media {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset.syntax--unit {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--attribute-value {
+  color: #b5bd68;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--wildcard {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--attribute {
+  color: #c5c8c6;
+}
+
+/*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed and saved.
+ *
+ * Add your own CSS or Less to fully customize Atom.
+ * If you are unfamiliar with Less, you can read more about it here:
+ * http://lesscss.org
+ */
+/*
+ * Examples
+ * (To see them, uncomment and save)
+ */
+</style>
+
+  </head>
+  <body>
+    <h1>Ungraded Lab: Practice Kubernetes in your Local Environment</h1>
+<p>In the previous reading item, you went through the basics of Kubernetes by doing imperative commands in the interactive shell (i.e. with <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl</code>). It shows how this tool can be used to orchestrate containers to host an application. If you haven’t done that exercise, we highly encourage you to go back because we will assume that you are already familiar with the concepts discussed in <a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/">those 6 modules</a>. This lab will be an extension of that activity and will show a few more concepts to prepare you for this week’s graded assignment. Specifically, you will:</p>
+<ul>
+<li>setup Kubernetes in your local machine for learning and development</li>
+<li>create Kubernetes objects using YAML files</li>
+<li>deploy containers running a Tensorflow model server</li>
+<li>access the deployment using a Nodeport service</li>
+<li>autoscale the deployment to dynamicaly handle incoming traffic</li>
+</ul>
+<p>You should be able to run all the commands using Mac and Linux (tested on Ubuntu) CLI, Windows Powershell (run as Administrator) and Git Bash. In case you have limited resources or can’t install in your workstation, don’t worry about it. You can still refer to this document later and we’ll show the expected output at each step.</p>
+<h2>Installation</h2>
+<p>First, you will setup your machine to run a local Kubernetes cluster. This gives you more freedom to tweak settings and implement more features compared to the online Katacoda environment you used in the Kubernetes tutorial. It’s a great tool for learning and for local development as well. There are several Kubernetes distributions and the one best suited for our purpose is <a href="https://minikube.sigs.k8s.io/docs/">Minikube</a>. You might remember it being mentioned in the first module of the Kubernetes basics exercise.</p>
+<p><em>Note: If you installed Docker for Desktop in the previous ungraded labs, you may have noticed that it also has a Kubernetes Engine that can be enabled in the Settings. At the moment, we found some limitations for it in some OS and it needs more tweaking or workarounds to make all the exercises here work. Thus, we recommend using Minikube for a more seamless experience.</em></p>
+<p>You will need to install the following tools to go through this lab:</p>
+<ul>
+<li>
+<p><strong>curl</strong> - a command-line tool for transferring data using various network protocols. You may have a already installed this in the Docker ungraded lab but in case you haven’t, <a href="https://reqbin.com/Article/InstallCurl">here is one reference</a> to do so. You will use this to query your model later.</p>
+</li>
+<li>
+<p><strong>Virtualbox</strong> - Minikube is meant to run in a virtual machine (VM) so you will need virtualization software to act as the VM driver. While you can also specify <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker</code> as the VM driver, we found that it has limitations so it’s best to use Virtualbox instead. Installation instructions can be found <a href="https://www.virtualbox.org/wiki/Downloads">here</a>. When prompted by your OS, make sure to allow network traffic for this software so you won’t have firewall issues later on.</p>
+</li>
+<li>
+<p><strong>kubectl</strong> - the command line tool for interacting with Kubernetes clusters. Installation instructions can be found <a href="https://kubernetes.io/docs/tasks/tools/">here</a></p>
+</li>
+<li>
+<p><strong>Minikube</strong> - a Kubernetes distribution geared towards new users and development work. It is not meant for production deployments however since it can only run a single node cluster on your machine. Installation instructions <a href="https://minikube.sigs.k8s.io/docs/start/">here</a>.</p>
+</li>
+</ul>
+<details>
+<summary> <i>Windows Users: Please click here for additional notes. </i></summary>
+<ol>
+<li>Make sure that the directories to the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl</code> binaries are setup in your system <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">PATH</code> (or <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Path</code>). That will allow you to execute these in the command line from any directory. Instructions can be found <a href="https://www.computerhope.com/issues/ch000549.htm">here</a> in case you need to review how this is done.</li>
+<li>You may need to append a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">.exe</code> in the commands later to make use of <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl</code>. For example, if you see <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl --help</code>, please do <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl.exe --help</code> instead.</li>
+<li>In case you have <a href="https://git-scm.com/download/win">Git for Windows</a> setup in your machine, then you can use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Git Bash</code> CLI bundled with that package instead of <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Windows Powershell</code>. Just search for it in the Search Bar to see if it is already in your system. That CLI runs like a Linux terminal so most of the commands in the next sections will run as is. But we still placed instructions in case you can only use Powershell.</li>
+<li>If you encounter errors about running VirtualBox alongside WSL2 similar to <a href="https://github.com/MicrosoftDocs/WSL/issues/798">this</a>, you can fallback to using Docker as the VM runtime for Minikube. Instructions are shown in the next sections in case you follow this path.</li>
+</ol>
+<hr>
+</details>
+<br>
+<h2>Architecture</h2>
+<p>The application you’ll be building will look like the figure below:</p>
+<img src="https://i.imgur.com/UtQoff4.png" alt="https://i.imgur.com/UtQoff4.png">
+<p>You will create a deployment that spins up containers that runs a model server. In this case, that will be from the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">tensorflow/serving</code> image you already used in the previous labs. The deployment can be accessed by external terminals (i.e. your users) through an exposed service. This brings inference requests to the model servers and responds with predictions from your model.</p>
+<p>Lastly, the deployment will spin up or spin down pods based on CPU utilization. It will start with one pod but when the load exceeds a pre-defined point, it will spin up additional pods to share the load.</p>
+<h2>Start Minikube</h2>
+<p>You are now almost ready to start your Kubernetes cluster. There is just one more additional step. As mentioned earlier, Minikube runs inside a virtual machine. That implies that the pods you will create later on will only see the volumes inside this VM. Thus, if you want to load a model into your pods, then you should first mount the location of this model inside Minikube’s VM. Let’s set that up now.</p>
+<p>You will be using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">half_plus_two</code> model that you saw in earlier ungraded labs. You can copy it to your <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">/var/tmp</code> directory (Mac, Linux) or <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">C:/tmp</code> (Windows) so we’ll have a common directory to mount to the VM. You can use the command below for Mac and Linux:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">cp</span> <span class="syntax--entity syntax--other syntax--attribute-name">-R</span> ./saved_model_half_plus_two_cpu /var/tmp</span></pre>
+<p>If you’re using Windows (not WSL), then you can use the GUI to create a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">tmp</code> folder under your <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">C:</code> drive then copy the folder there. You should have a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">C:/tmp/saved_model_half_plus_two_cpu</code> folder as a result</p>
+<p>Now you’re ready to start Minikube! Run the command below to initialize the VM with Virtualbox and mount the folder containing your model file:</p>
+<p>For Mac and Linux:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">minikube</span> start <span class="syntax--entity syntax--other syntax--attribute-name">--mount=True</span> <span class="syntax--entity syntax--other syntax--attribute-name">--mount-string=</span><span class="syntax--string">"/var/tmp:/var/tmp"</span> <span class="syntax--entity syntax--other syntax--attribute-name">--vm-driver=virtualbox</span></span></pre>
+<p>For Windows:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">minikube</span> start <span class="syntax--entity syntax--other syntax--attribute-name">--mount=True</span> <span class="syntax--entity syntax--other syntax--attribute-name">--mount-string=</span><span class="syntax--string">"C:/tmp:/var/tmp"</span> <span class="syntax--entity syntax--other syntax--attribute-name">--vm-driver=virtualbox</span></span></pre>
+<details>
+<summary> <i>Troubleshooting: Please click here if you're getting errors with these commands. </i></summary>
+<p>Some learners reported prompts about driver errors and thus, they can’t make Virtualbox the VM driver when launching Minikube. In case you run into the same issue and can’t resolve it, you can just fallback to Docker:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">minikube start --mount=True --mount-string="C:/tmp:/var/tmp" --vm-driver=docker</span></span></pre>
+<p>This would require revisions to some of the commands later and we placed that in <em>Troubleshooting</em> sections as well.</p>
+<hr>
+</details>
+<br>
+<h2>Creating Objects with YAML files</h2>
+<p>In the official Kubernetes basics tutorial, you mainly used <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl</code> to create objects such as pods, deployments, and services. While this definitely works, your setup will be more portable and easier to maintain if you configure them using <a href="https://yaml.org/spec/1.2/spec.html">YAML</a> files. We’ve included these in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">yaml</code> directory of this ungraded lab so you can peruse how these are constructed. The <a href="https://kubernetes.io/docs/reference/kubernetes-api/">Kubernetes API</a> also documents the supported fields for each object. For example, the API for Pods can be found <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/">here</a>.</p>
+<p>One way to generate this when you don’t have a template to begin with is to first use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl</code> command then use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-o yaml</code> flag to output the YAML file for you. For example, the <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods">kubectl cheatsheet</a> shows that you can generate the YAML for a pod running an <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">nginx</code> image with this command:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">kubectl run nginx --image=nginx --dry-run=client -o yaml &gt; pod.yaml</span></span></pre>
+<p>All objects needed for this lab are already provided and you are free to modify them later when you want to practice different settings. Let’s go through them one by one in the next sections.</p>
+<h3>Config Maps</h3>
+<p>First, you will create a <a href="https://kubernetes.io/docs/concepts/configuration/configmap/">config map</a> that defines a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">MODEL_NAME</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">MODEL_PATH</code> variable. This is needed because of how the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">tensorflow/serving</code> image is configured. If you look at the last layer of the docker file <a href="https://hub.docker.com/layers/tensorflow/serving/2.6.0/images/sha256-7e831f11c9ef928c09b4064a059066484079ac819991f162a938de0ad4b0fbd5?context=explore">here</a>, you’ll see that it runs a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">/usr/bin/tf_serving_entrypoint.sh</code> script when it starts the container. That script just contains this command and it should look familiar from the previous ungraded labs:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--comment syntax--block">#!/bin/bash </span>
+
+<span class="syntax--entity syntax--name syntax--function">tensorflow_model_server</span> <span class="syntax--entity syntax--other syntax--attribute-name">--port=8500</span> <span class="syntax--entity syntax--other syntax--attribute-name">--rest_api_port=8501</span> <span class="syntax--entity syntax--other syntax--attribute-name">--model_name=</span><span class="syntax--punctuation syntax--section syntax--embedded">${</span><span class="syntax--variable syntax--other syntax--member">MODEL_NAME</span><span class="syntax--punctuation syntax--section syntax--embedded">}</span> <span class="syntax--entity syntax--other syntax--attribute-name">--model_base_path=</span><span class="syntax--punctuation syntax--section syntax--embedded">${</span><span class="syntax--variable syntax--other syntax--member">MODEL_BASE_PATH</span><span class="syntax--punctuation syntax--section syntax--embedded">}</span>/<span class="syntax--punctuation syntax--section syntax--embedded">${</span><span class="syntax--variable syntax--other syntax--member">MODEL_NAME</span><span class="syntax--punctuation syntax--section syntax--embedded">}</span> <span class="syntax--string">"<span class="syntax--punctuation syntax--section syntax--embedded">$</span><span class="syntax--variable syntax--other syntax--member">@</span>"</span></span></pre>
+<p>It basically starts up the model server and uses the environment variables <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">MODEL_BASE_PATH</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">MODEL_NAME</code> to find the model. Though you can explicitly define this as well in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Deployment</code> YAML file, it would be more organized to have it in a configmap so you can plug it in later. Please open <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">yaml/configmap.yaml</code> to see the sytax.</p>
+<details>
+<summary> <i>configmap.yaml</i></summary>
+<pre class="editor-colors lang-yaml" style="tab-size: 4;"><span class="syntax--source syntax--yaml"><span class="syntax--entity syntax--name syntax--tag syntax--yaml">apiVersion</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--float syntax--yaml">v1</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">kind</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">ConfigMap</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">metadata</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tfserving-configs</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">data</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">MODEL_NAME</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">half_plus_two</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">MODEL_PATH</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">/models/half_plus_two</span></span></pre>
+</details>
+<br>
+<p>You can create the object now using <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl</code> as shown below. Notice the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-f</code> flag to specify a filename. You can also specify a directory but we’ll do that later.</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">kubectl</span> apply <span class="syntax--entity syntax--other syntax--attribute-name">-f</span> yaml/configmap.yaml</span></pre>
+<p>With that, you should be able to <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">get</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">describe</code> the object as before. For instance, <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl describe cm tfserving-configs</code> should show you:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">Name:</span>         tfserving-configs
+<span class="syntax--entity syntax--name syntax--function">Namespace:</span>    default
+<span class="syntax--entity syntax--name syntax--function">Labels:</span>       <span class="syntax--keyword syntax--operator">&lt;</span>none<span class="syntax--keyword syntax--operator">&gt;</span>
+Annotations:  <span class="syntax--keyword syntax--operator">&lt;</span>none<span class="syntax--keyword syntax--operator">&gt;</span>
+
+Data
+<span class="syntax--entity syntax--name syntax--function">====</span>
+<span class="syntax--entity syntax--name syntax--function">MODEL_PATH:</span>
+<span class="syntax--entity syntax--name syntax--function">----</span>
+<span class="syntax--entity syntax--name syntax--function">/models/half_plus_two</span>
+<span class="syntax--entity syntax--name syntax--function">MODEL_NAME:</span>
+<span class="syntax--entity syntax--name syntax--function">----</span>
+<span class="syntax--entity syntax--name syntax--function">half_plus_two</span>
+<span class="syntax--entity syntax--name syntax--function">Events:</span>  <span class="syntax--keyword syntax--operator">&lt;</span>none<span class="syntax--keyword syntax--operator">&gt;</span></span></pre>
+<h3>Create a Deployment</h3>
+<p>You will now create the deployment for your application. Please open <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">yaml/deployment.yaml</code> to see the spec for this object.</p>
+<details>
+<summary> <i>deployment.yaml</i></summary>
+<pre class="editor-colors lang-yaml" style="tab-size: 4;"><span class="syntax--source syntax--yaml"><span class="syntax--entity syntax--name syntax--tag syntax--yaml">apiVersion</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">apps/v1</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">kind</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Deployment</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">metadata</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving-deployment</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">spec</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">replicas</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--integer syntax--yaml">1</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">selector</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">matchLabels</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--entity syntax--name syntax--tag syntax--yaml">app</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">template</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">metadata</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--entity syntax--name syntax--tag syntax--yaml">labels</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">app</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">spec</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--entity syntax--name syntax--tag syntax--yaml">containers</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+      <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">image</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tensorflow/serving</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">envFrom</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+        <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--entity syntax--name syntax--tag syntax--yaml">configMapRef</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+            <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tfserving-configs</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">ports</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+        <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--entity syntax--name syntax--tag syntax--yaml">containerPort</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--integer syntax--yaml">8501</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">volumeMounts</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+          <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving-volume</span>
+            <span class="syntax--entity syntax--name syntax--tag syntax--yaml">mountPath</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">/models/half_plus_two</span>
+        <span class="syntax--entity syntax--name syntax--tag syntax--yaml">resources</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+          <span class="syntax--entity syntax--name syntax--tag syntax--yaml">requests</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+            <span class="syntax--entity syntax--name syntax--tag syntax--yaml">memory</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--float syntax--yaml">32M</span>
+            <span class="syntax--entity syntax--name syntax--tag syntax--yaml">cpu</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--float syntax--yaml">5m</span>
+          <span class="syntax--entity syntax--name syntax--tag syntax--yaml">limits</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+            <span class="syntax--entity syntax--name syntax--tag syntax--yaml">memory</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--float syntax--yaml">64M</span>
+            <span class="syntax--entity syntax--name syntax--tag syntax--yaml">cpu</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--float syntax--yaml">10m</span>
+
+      <span class="syntax--entity syntax--name syntax--tag syntax--yaml">volumes</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+        <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving-volume</span>
+          <span class="syntax--entity syntax--name syntax--tag syntax--yaml">hostPath</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+            <span class="syntax--entity syntax--name syntax--tag syntax--yaml">path</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">/var/tmp/saved_model_half_plus_two_cpu</span>
+            <span class="syntax--entity syntax--name syntax--tag syntax--yaml">type</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Directory</span></span></pre>
+</details>
+<br>
+<p>You will see that it starts up one replica, uses <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">tensorflow/serving</code> as the container image and defines environment variables via the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">envFrom</code> tag. It also exposes port <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">8501</code> of the container because you will be sending HTTP requests to it later on. It also defines cpu and memory limits and mounts the volume from the Minikube VM to the container.</p>
+<p>As before, you can apply this file to create the object:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">kubectl</span> apply <span class="syntax--entity syntax--other syntax--attribute-name">-f</span> yaml/deployment.yaml</span></pre>
+<p>Running <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl get deploy</code> after around 90 seconds should show you something like below to tell you that the deployment is ready.</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">NAME</span>                    READY   UP-TO-DATE   AVAILABLE   AGE
+<span class="syntax--entity syntax--name syntax--function">tf-serving-deployment</span>   1/1     1            1           15s</span></pre>
+<h3>Expose the deployment through a service</h3>
+<p>As you learned in the Kubernetes tutorial before, you will need to create a service so your application can be accessible outside the cluster. We’ve included <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">yaml/service.yaml</code> for that.</p>
+<details>
+<summary> <i>service.yaml</i></summary>
+<pre class="editor-colors lang-yaml" style="tab-size: 4;"><span class="syntax--source syntax--yaml"><span class="syntax--entity syntax--name syntax--tag syntax--yaml">apiVersion</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--float syntax--yaml">v1</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">kind</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Service</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">metadata</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving-service</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">namespace</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">default</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">labels</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">app</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">spec</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">type</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">NodePort</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">ports</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--punctuation syntax--definition syntax--entry syntax--yaml">-</span> <span class="syntax--entity syntax--name syntax--tag syntax--yaml">port</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--integer syntax--yaml">8501</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">targetPort</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--integer syntax--yaml">8501</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">nodePort</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--integer syntax--yaml">30001</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">protocol</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">TCP</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving-http</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">selector</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">app</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving</span></span></pre>
+</details>
+<br>
+<p>It defines a <a href="https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport">NodePort</a> service which exposes the node’s port 30001. Requests sent to this port will be sent to the containers’ specified <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">targetPort</code> which is <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">8501</code>.</p>
+<p>Please apply <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">yaml/service.yaml</code> and run <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl get svc tf-serving-service</code>. You should see something like this:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">NAME</span>                 TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(<span class="syntax--entity syntax--name syntax--function">S</span>)          <span class="syntax--entity syntax--name syntax--function">AGE</span>
+<span class="syntax--entity syntax--name syntax--function">tf-serving-service</span>   NodePort   10.103.30.4   <span class="syntax--keyword syntax--operator">&lt;</span>none<span class="syntax--keyword syntax--operator">&gt;</span>        8501:30001/TCP   <span class="syntax--entity syntax--name syntax--function">27s</span></span></pre>
+<p>You can try accessing the deployment now as a sanity check. The following <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> command will send a row of inference requests to the Nodeport service:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">curl</span> <span class="syntax--entity syntax--other syntax--attribute-name">-d</span> <span class="syntax--string">'{"instances": [1.0, 2.0, 5.0]}'</span> <span class="syntax--entity syntax--other syntax--attribute-name">-X</span> POST $(<span class="syntax--entity syntax--name syntax--function">minikube</span> ip):30001/v1/models/half_plus_two:predict</span></pre>
+<p>If the command above does not work, you can run <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">minikube ip</code> first to get the IP address of the Minikube node. It should return a local IP address like <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">192.168.99.102</code> (If you see <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">127.0.0.1</code>, please see the troubleshooting sections below). You can then plug this in the command above by replacing the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">$(minikube ip)</code> string. For example:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">curl</span> <span class="syntax--entity syntax--other syntax--attribute-name">-d</span> <span class="syntax--string">'{"instances": [1.0, 2.0, 5.0]}'</span> <span class="syntax--entity syntax--other syntax--attribute-name">-X</span> POST http://192.168.99.102:30001/v1/models/half_plus_two:predict</span></pre>
+<details>
+<summary> <i> Troubleshooting: Click here if you are using Powershell and have VirtualBox as the VM driver </i> </summary>
+<p>First, make sure that you have setup <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> in your system <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">PATH</code> as mentioned in the curl installation instructions. Then run this command:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">curl.exe -d '{\"instances\": [1.0, 2.0, 5.0]}' -X POST "$(minikube ip):30001/v1/models/half_plus_two:predict"</span></span></pre>
+<p>The changes compared to the Mac/Linux command are:</p>
+<ul>
+<li>
+<p>use <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl.exe</code> to avoid confusion with the Windows built-in <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code>. The latter is an alias for <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Invoke-WebRequest</code>. This also implies that you’ve added the curl path to your PATH as mentioned in the curl installation instructions.</p>
+</li>
+<li>
+<p>the additional <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">\</code> in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">instances</code> string, as well as the additional <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">"</code> in the POST URL are needed so Powershell can parse it correctly</p>
+</li>
+</ul>
+<hr>
+</details>
+<br>
+<details>
+<summary> <i> Troubleshooting: Click here if you used Docker instead of Virtualbox as the VM runtime </i> </summary>
+<p>You will most likely get a refused connection here because the network is not yet setup. To get around that, please run this command in a separate window: <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">minikube service tf-serving-service</code>. You will see an output like below</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">|-----------|--------------------|----------------------|---------------------------|
+| NAMESPACE |        NAME        |     TARGET PORT      |            URL            |
+|-----------|--------------------|----------------------|---------------------------|
+| default   | tf-serving-service | tf-serving-http/8501 | <span class="syntax--markup syntax--underline syntax--link syntax--http syntax--hyperlink">http://192.168.20.2:30001</span> |
+|-----------|--------------------|----------------------|---------------------------|
+🏃  Starting tunnel for service tf-serving-service.
+|-----------|--------------------|-------------|------------------------|
+| NAMESPACE |        NAME        | TARGET PORT |          URL           |
+|-----------|--------------------|-------------|------------------------|
+| default   | tf-serving-service |             | <span class="syntax--markup syntax--underline syntax--link syntax--http syntax--hyperlink">http://127.0.0.1:60473</span> |
+|-----------|--------------------|-------------|------------------------|</span></span></pre>
+<p>This opens a tunnel to your service with a random port. Grab the URL at the bottom right box and use it in the curl command like this in Linux/Mac:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST <span class="syntax--markup syntax--underline syntax--link syntax--http syntax--hyperlink">http://127.0.0.1:60473/v1/models/half_plus_two:predict</span></span></span></pre>
+<p>or in Windows:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">curl.exe -d '{\"instances\": [1.0, 2.0, 5.0]}' -X POST <span class="syntax--markup syntax--underline syntax--link syntax--http syntax--hyperlink">http://127.0.0.1:60473/v1/models/half_plus_two:predict</span></span></span></pre>
+<hr>
+</details>
+<br>
+<p>If the command is successful, you should see the results returned by the model:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">{
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">"predictions": [2.5, 3.0, 4.5
+    ]
+</span><span class="syntax--meta syntax--paragraph syntax--text">}</span></span></pre>
+<p>Great! Your application is successfully running and can be accessed outside the cluster!</p>
+<h3>Horizontal Pod Autoscaler</h3>
+<p>As mentioned in the lectures, one of the great advantages of container orchestration is it allows you to scale your application depending on user needs. Kubernetes provides a <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/">Horizontal Pod Autoscaler (HPA)</a> to create or remove replicasets based on observed metrics. To do this, the HPA queries a <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/#metrics-server">Metrics Server</a> to measure resource utilization such as CPU and memory. The Metrics Server is not launched by default in Minikube and needs to be enabled with the following command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">minikube</span> addons enable metrics-server</span></pre>
+<p>You should see a prompt saying <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">🌟  The 'metrics-server' addon is enabled </code> shortly. This launches a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">metrics-server</code> deployment in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kube-system</code> namespace. Run the command below and wait for the deployment to be ready.</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">kubectl</span> get deployment metrics-server <span class="syntax--entity syntax--other syntax--attribute-name">-n</span> kube-system</span></pre>
+<p>You should see something like:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">NAME</span>             READY   UP-TO-DATE   AVAILABLE   AGE
+<span class="syntax--entity syntax--name syntax--function">metrics-server</span>   1/1     1            1           76s</span></pre>
+<p>With that, you can now create your autoscaler by applying <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">yaml/autoscale.yaml</code>.</p>
+<details>
+<summary> <i>autoscale.yaml</i></summary>
+<pre class="editor-colors lang-yaml" style="tab-size: 4;"><span class="syntax--source syntax--yaml"><span class="syntax--entity syntax--name syntax--tag syntax--yaml">apiVersion</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">autoscaling/v1</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">kind</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">HorizontalPodAutoscaler</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">metadata</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">labels</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">app</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving-hpa</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">namespace</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">default</span>
+<span class="syntax--entity syntax--name syntax--tag syntax--yaml">spec</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">maxReplicas</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--integer syntax--yaml">3</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">minReplicas</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--integer syntax--yaml">1</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">scaleTargetRef</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">apiVersion</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">apps/v1</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">kind</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">Deployment</span>
+    <span class="syntax--entity syntax--name syntax--tag syntax--yaml">name</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--string syntax--unquoted syntax--yaml">tf-serving-deployment</span>
+  <span class="syntax--entity syntax--name syntax--tag syntax--yaml">targetCPUUtilizationPercentage</span><span class="syntax--punctuation syntax--separator syntax--key-value syntax--yaml">:</span> <span class="syntax--constant syntax--numeric syntax--integer syntax--yaml">20</span></span></pre>
+</details>
+<br>
+<p>Please wait for about a minute so it can query the metrics server. Running <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl get hpa</code> should show:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">NAME             REFERENCE                          TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+tf-serving-hpa   Deployment/tf-serving-deployment   0%/2%    1         3         1          38s
+</span></span></pre>
+<p>If it’s showing <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Unknown</code> instead of <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">0%</code> in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">TARGETS</code> column, you can try sending a few curl commands as you did earlier then wait for another minute.</p>
+<h3>Stress Test</h3>
+<p>To test the autoscaling capability of your deployment, we provided a short bash script (<code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">request.sh</code>) that will just persistently send requests to your application. Please open a new terminal window, make sure that you’re in the root directory of this README file, then run this command (for Linux and Mac):</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">/bin/bash</span> request.sh</span></pre>
+<details>
+<summary> <i>request.sh</i></summary>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--comment syntax--block">#!/bin/bash</span>
+
+<span class="syntax--keyword syntax--control">while</span> <span class="syntax--entity syntax--name syntax--function">sleep</span> 0.01;
+
+<span class="syntax--keyword syntax--control">do</span> <span class="syntax--entity syntax--name syntax--function">curl</span> <span class="syntax--entity syntax--other syntax--attribute-name">-d</span> <span class="syntax--string">'{"instances": [1.0, 2.0, 5.0]}'</span> <span class="syntax--entity syntax--other syntax--attribute-name">-X</span> POST $(<span class="syntax--entity syntax--name syntax--function">minikube</span> ip):30001/v1/models/half_plus_two:predict;
+
+<span class="syntax--keyword syntax--control">done</span>
+</span></pre>
+</details>
+<br>
+<details>
+<summary> <i>Troubleshooting: Click here if you used Docker as the VM driver instead of VirtualBox </i></summary>
+<p>If you are using a minikube tunnel for the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">tf-serving-service</code>, then you need to modify the bash script to match the URL that you are using. Please open <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">request.sh</code> in a text editor and change <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">$(minikube ip)</code> to the URL specified in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">minikube tunnel</code> command earlier. For example:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">#!/bin/bash
+</span>
+<span class="syntax--meta syntax--paragraph syntax--text">while sleep 0.01;
+</span>
+<span class="syntax--meta syntax--paragraph syntax--text">do curl -d '{"instances": [1.0, 2.0, 5.0]}' -X POST <span class="syntax--markup syntax--underline syntax--link syntax--http syntax--hyperlink">http://127.0.0.1:60473/v1/models/half_plus_two:predict</span>;
+</span>
+<span class="syntax--meta syntax--paragraph syntax--text">done</span></span></pre>
+<hr>
+</details>
+<br>
+<details>
+<summary><i>Troubleshooting: Click here if you are using Windows Powershell</i></summary>
+<p>You will need a different script for Powershell. Please do these steps to run it:</p>
+<p>1 - Please run this command in Powershell to see if scripting is enabled:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">Get-ExecutionPolicy</span></span></pre>
+<p>Please remember the output value so you can set it back after the exercise. If you haven’t scripted before, it is most likely set to <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Restricted</code>.</p>
+<p>2 - Enable scripting with this command:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">Set-ExecutionPolicy RemoteSigned</span></span></pre>
+<p>3 - With that, you should be able run the script in Powershell with:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">./request.ps1</span></span></pre>
+<p>4 - When you’re done with the entire exercise, you can revert to the original ExecutionPolicy in step 1 (e.g. <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Set-ExecutionPolicy Restricted</code>).</p>
+<hr>
+</details>
+<br>
+<p>You should see results being printed in quick succession:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">{
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">"predictions": [2.5, 3.0, 4.5
+    ]
+</span><span class="syntax--meta syntax--paragraph syntax--text">}{
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">"predictions": [2.5, 3.0, 4.5
+    ]
+</span><span class="syntax--meta syntax--paragraph syntax--text">}{
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">"predictions": [2.5, 3.0, 4.5
+    ]
+</span><span class="syntax--meta syntax--paragraph syntax--text">}{
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">"predictions": [2.5, 3.0, 4.5
+    ]
+</span><span class="syntax--meta syntax--paragraph syntax--text">}{
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">"predictions": [2.5, 3.0, 4.5
+    ]
+</span><span class="syntax--meta syntax--paragraph syntax--text">}{
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">"predictions": [2.5, 3.0, 4.5
+    ]
+</span><span class="syntax--meta syntax--paragraph syntax--text">}{
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">"predictions": [2.5, 3.0, 4.5
+    ]
+</span><span class="syntax--meta syntax--paragraph syntax--text">}{
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">"predictions": [2.5, 3.0, 4.5
+    ]
+</span><span class="syntax--meta syntax--paragraph syntax--text">}{
+</span></span></pre>
+<p>If you’re seeing connection refused, make sure that your service is still running with <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl get svc tf-serving-service</code>.</p>
+<p>There are several ways to monitor this but the easiest would be to use Minikube’s built-in dashboard. You can launch it by running:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">minikube dashboard</span></span></pre>
+<p>If you launched this immediately after you ran the request script, you should initially see a single replica running in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Deployments</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Pods</code> section:</p>
+<img src="https://i.imgur.com/BIMBTqX.png">
+<p>After about a minute of running the script, you will observe that the CPU utilization will reach 5 to 6m. This is more than the 20% that we set in the HPA so it will trigger spinning up the additional replicas:</p>
+<img src="https://i.imgur.com/nsZTf8W.png">
+<p>Finally, all 3 pods will be ready to accept request and will be sharing the load. See that each pod below shows <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">2.00m</code> CPU Usage.</p>
+<img src="https://i.imgur.com/TZxHzac.png">
+<p>You can now stop the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">request.sh</code> script by pressing <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Ctrl/Cmd + C</code>. Unlike scaling up, scaling down the number of pods will take longer before it is executed. You will wait around 5 minutes (where the CPU usage is below 1m) before you see that there is only one pod running again. This is the behavior for the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">autoscaling/v1</code> API version we are using. There is already a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">v2</code> in the beta stage being developed to override this behavior and you can read more about it <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#api-object">here</a>.</p>
+<h2>Tear Down</h2>
+<p>After you’re done experimenting, you can destroy the resources you created if you want. You can simply call <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl delete -f yaml</code> to delete all resources defined in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">yaml</code> folder. You should see something like this:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">horizontalpodautoscaler.autoscaling</span> <span class="syntax--string">"tf-serving-hpa"</span> deleted
+<span class="syntax--entity syntax--name syntax--function">configmap</span> <span class="syntax--string">"tfserving-configs"</span> deleted
+<span class="syntax--entity syntax--name syntax--function">deployment.apps</span> <span class="syntax--string">"tf-serving-deployment"</span> deleted
+<span class="syntax--entity syntax--name syntax--function">service</span> <span class="syntax--string">"tf-serving-service"</span> deleted</span></pre>
+<p>You can then re-create them all next time with one command by running <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">kubectl apply -f yaml</code>. Just remember to check if <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">metrics-server</code> is enabled and running.</p>
+<p>If you also want to destroy the VM, then you can run <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">minikube delete</code>.</p>
+<p>If you used Powershell, then you can disable scripting as mentioned in the instructions earlier.</p>
+<h2>Wrap Up</h2>
+<p>In this lab, you got to practice more Kubernetes basics by using YAML configuration files and running the Tensorflow Serving container. This can be a baseline for you to start trying to serve your own models with an orchestration framework in mind. Most of the concepts here will be applicable to the Qwiklabs for this week so feel free to reference this document. Great job and on to the next part of the course!</p>
+
+  </body>
+</html>

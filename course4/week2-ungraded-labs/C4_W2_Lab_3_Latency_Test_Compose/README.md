@@ -30,7 +30,7 @@ Let's get started!
 
 You could manually spin up the 5 containers but you will need to find a way to link them together via a network. This can be achieved using regular Docker commands but it is much easier to accomplish using Docker Compose. 
 
-Instead of running each container in a separate terminal window you can simply define a configuration file in `YAML` format and use the `docker-compose up` command to run your multi-container application. In case you haven't worked with `YAML` files, these are usually for configuration and they work in a similar fashion to Python, by using indentation to specify scope.
+Instead of running each container in a separate terminal window you can simply define a configuration file in `YAML` format and use the `docker-compose up` command to run your multi-container application. In case you haven't worked with `YAML` files, these are usually for configuration and they work in a similar fashion to Python, by **using indentation to specify scope**.
 
 Let's take a look at the beggining of `docker-compose.yml` file:
 ```yml
@@ -81,7 +81,7 @@ The locust service has some more stuff going on but at this point you have alrea
 
 - First, this container will have port 8089 mapped to port 8089 in your localhost. This is for you to be able to access the service directly. 
 
-- There is also a volume, this is very similar to the bind mounts you saw in previous labs. This allows you to mount files in your local filesystem onto the container, it is often used to persist changes but in this case it is done so you don't have to create a new image that uses the `locustio/locust` one as base and copies the `locustfile.py` inside the image. 
+- There is also a `volume`, this is very similar to the bind mounts you saw in previous labs. This allows you to mount files in your local filesystem onto the container, it is often used to persist changes but in this case it is done so you don't have to create a new image that uses the `locustio/locust` one as base and copies the `locustfile.py` inside the image. 
 
 - Finally the `command` item is analogous to the `CMD` instruction and it refers to the command that will be run when spinning up the container, in this case the locust server is started to perform the load testing.
 
@@ -90,6 +90,65 @@ Before spinning up this multi-container application, let's take some time to und
 ## Understanding Locust
 
 By convention the file that handles the locust logic is named `locustfile.py`. Unlike Dockerfiles, this file is a regular python script. Remember you can take a look at the complete file in this repo.
+
+
+<details>
+<summary> <i>locustfile.py</i></summary>
+
+```python
+from locust import HttpUser, task, constant
+
+
+class LoadTest(HttpUser):
+    wait_time = constant(0)
+    host = "http://localhost"
+
+    @task
+    def predict_batch_1(self):
+        request_body = {"batches": [[1.0 for i in range(13)]]}
+        self.client.post(
+            "http://batch-1:80/predict", json=request_body, name="batch-1"
+        )
+
+    @task
+    def predict_batch_32(self):
+        request_body = {"batches": [[1.0 for i in range(13)] for i in range(32)]}
+        self.client.post(
+            "http://batch-32:80/predict", json=request_body, name="batch-32"
+        )
+
+    @task
+    def predict_batch_64(self):
+        request_body = {"batches": [[1.0 for i in range(13)] for i in range(64)]}
+        self.client.post(
+            "http://batch-64:80/predict", json=request_body, name="batch-64"
+        )
+
+    @task
+    def predict_no_batch(self):
+        request_body = {
+            "alcohol": 1.0,
+            "malic_acid": 1.0,
+            "ash": 1.0,
+            "alcalinity_of_ash": 1.0,
+            "magnesium": 1.0,
+            "total_phenols": 1.0,
+            "flavanoids": 1.0,
+            "nonflavanoid_phenols": 1.0,
+            "proanthocyanins": 1.0,
+            "color_intensity": 1.0,
+            "hue": 1.0,
+            "od280_od315_of_diluted_wines": 1.0,
+            "proline": 1.0,
+        }
+        self.client.post(
+            "http://no-batch:80/predict", json=request_body, name="0:batch"
+        )
+
+```
+
+</details>
+</br>
 
 The way locust works is by simulating users that will constantly send requests to your services. By doing this you can measure things like `RPS` (requests per second) or the average time each request is taking. **This is great to understand the limitations of your servers and to test if they will work under the circumstances they will be exposed once they are launched into production.**
 
@@ -196,7 +255,7 @@ Now head over to [http://localhost:8089/](http://localhost:8089/) and you will s
 
 Now click on the `Start swarming` button and the load test will start. You will see a dashboard that looks like this:
 
-![locust](../../assets/locust-home.png)
+![Imgur](https://i.imgur.com/2i8pWAI.png)
 
 Each row corresponds to a service you are testing. You can tell which is which by looking at the name (these were defined in the `locustfile.py`). 
 

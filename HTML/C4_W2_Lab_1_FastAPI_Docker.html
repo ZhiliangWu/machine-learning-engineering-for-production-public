@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html data-markdown-preview-plus-context="html-export">
+  <head>
+    <meta charset="utf-8" />
+    <title>C4_W2_Lab_1_FastAPI_Docker</title><script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    extensions: ["[a11y]/accessibility-menu.js"],
+    'HTML-CSS': {
+      availableFonts: [],
+      webFont: 'TeX',
+      undefinedFamily: "serif",
+      mtextFontInherit: true,
+    },
+    TeX: {
+  "extensions": [
+    "AMSmath.js",
+    "AMSsymbols.js",
+    "noErrors.js",
+    "noUndefined.js"
+  ],
+  "Macros": {},
+  "equationNumbers": {}
+},
+    showMathMenu: true
+  });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js"></script>
+    <style>.emoji {
+  max-width: 1em !important;
+}
+del {
+  text-decoration: none;
+  position: relative;
+}
+del::after {
+  border-bottom: 1px solid black;
+  content: '';
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+ul.contains-task-list li.task-list-item {
+  position: relative;
+  list-style-type: none;
+}
+ul.contains-task-list li.task-list-item input.task-list-item-checkbox {
+  position: absolute;
+  transform: translateX(-100%);
+  width: 26px;
+}
+span.critic.comment {
+  position: relative;
+}
+span.critic.comment::before {
+  content: '\1f4ac';
+  position: initial;
+}
+span.critic.comment > span {
+  display: none;
+}
+span.critic.comment:hover > span {
+  display: initial;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: 1px solid;
+  border-radius: 5px;
+  max-height: 4em;
+  overflow: auto;
+}
+span.critic.comment:focus > span {
+  display: initial;
+  text-decoration: underline;
+  position: initial;
+  top: auto;
+  left: auto;
+  border: initial;
+  border-radius: initial;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: transparent;
+}
+
+body {
+  overflow: initial !important;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  line-height: 1.6;
+  word-wrap: break-word;
+  padding: 30px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+}
+body > *:first-child {
+  margin-top: 0 !important;
+}
+body > *:last-child {
+  margin-bottom: 0 !important;
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+body .absent {
+  color: #c00;
+}
+body .anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+body .anchor:focus {
+  outline: none;
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  padding-left: 8px;
+  margin-left: -30px;
+  text-decoration: none;
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  display: inline-block;
+}
+body h1 tt,
+body h2 tt,
+body h3 tt,
+body h4 tt,
+body h5 tt,
+body h6 tt,
+body h1 code,
+body h2 code,
+body h3 code,
+body h4 code,
+body h5 code,
+body h6 code {
+  font-size: inherit;
+}
+body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+body h1 .anchor {
+  line-height: 1;
+}
+body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+body h2 .anchor {
+  line-height: 1;
+}
+body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+body h3 .anchor {
+  line-height: 1.2;
+}
+body h4 {
+  font-size: 1.25em;
+}
+body h4 .anchor {
+  line-height: 1.2;
+}
+body h5 {
+  font-size: 1em;
+}
+body h5 .anchor {
+  line-height: 1.1;
+}
+body h6 {
+  font-size: 1em;
+  color: #777;
+}
+body h6 .anchor {
+  line-height: 1.1;
+}
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+body ul,
+body ol {
+  padding-left: 2em;
+}
+body ul.no-list,
+body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+body ul ul,
+body ul ol,
+body ol ol,
+body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+body li > p {
+  margin-top: 16px;
+}
+body dl {
+  padding: 0;
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+body blockquote > :first-child {
+  margin-top: 0;
+}
+body blockquote > :last-child {
+  margin-bottom: 0;
+}
+body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+body table th {
+  font-weight: bold;
+}
+body table th,
+body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body .emoji {
+  max-width: none;
+}
+body span.frame {
+  display: block;
+  overflow: hidden;
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+body span.frame span img {
+  display: block;
+  float: left;
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #333;
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+body span.float-left span {
+  margin: 13px 0 0;
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+body code,
+body tt {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+}
+body code:before,
+body tt:before,
+body code:after,
+body tt:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+body code br,
+body tt br {
+  display: none;
+}
+body del code {
+  text-decoration: inherit;
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+body .highlight {
+  margin-bottom: 16px;
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+body pre {
+  word-wrap: normal;
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+body pre code:before,
+body pre tt:before,
+body pre code:after,
+body pre tt:after {
+  content: normal;
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+span.critic.comment > span {
+  background-color: #fff;
+}
+a {
+  color: #337ab7;
+}
+
+.bracket-matcher .region {
+  border-bottom: 1px dotted lime;
+  position: absolute;
+}
+.line-number.bracket-matcher.bracket-matcher {
+  color: #c5c8c6;
+  background-color: #373b41;
+}
+
+pre.editor-colors {
+  background-color: #1d1f21;
+  color: #c5c8c6;
+}
+pre.editor-colors .wrap-guide {
+  background-color: #4f5256;
+}
+pre.editor-colors .indent-guide {
+  color: #4f5256;
+}
+pre.editor-colors .invisible-character {
+  color: #4f5256;
+}
+pre.editor-colors .gutter {
+  background-color: #1d1f21;
+  color: #969896;
+}
+pre.editor-colors .gutter .line-number {
+  padding: 0 0.25em 0 0.5em;
+  -webkit-font-smoothing: antialiased;
+}
+pre.editor-colors .gutter .line-number.cursor-line {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.cursor-line-no-selection {
+  color: #c5c8c6;
+}
+pre.editor-colors .gutter .line-number.folded,
+pre.editor-colors .gutter .line-number:after,
+pre.editor-colors .fold-marker:after {
+  color: #969896;
+}
+pre.editor-colors .invisible {
+  color: #c5c8c6;
+}
+pre.editor-colors .cursor {
+  color: #ffffff;
+}
+pre.editor-colors .selection .region {
+  background-color: #373b41;
+}
+pre.editor-colors .bracket-matcher .region {
+  border-color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment .syntax--markup.syntax--link {
+  color: #969896;
+}
+.syntax--entity.syntax--name.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--other.syntax--inherited-class {
+  color: #b5bd68;
+}
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--control {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--operator {
+  color: #c5c8c6;
+}
+.syntax--keyword.syntax--other.syntax--special-method {
+  color: #81a2be;
+}
+.syntax--keyword.syntax--other.syntax--unit {
+  color: #de935f;
+}
+.syntax--storage {
+  color: #b294bb;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--constant.syntax--other.syntax--color {
+  color: #8abeb7;
+}
+.syntax--constant.syntax--other.syntax--symbol {
+  color: #8abeb7;
+}
+.syntax--variable {
+  color: #cc6666;
+}
+.syntax--variable.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--variable.syntax--parameter.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--invalid.syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp {
+  color: #8abeb7;
+}
+.syntax--string.syntax--regexp .syntax--source.syntax--ruby.syntax--embedded {
+  color: #f0c674;
+}
+.syntax--string.syntax--other.syntax--link {
+  color: #cc6666;
+}
+.syntax--punctuation.syntax--definition.syntax--parameters,
+.syntax--punctuation.syntax--definition.syntax--array {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--definition.syntax--heading,
+.syntax--punctuation.syntax--definition.syntax--identity {
+  color: #81a2be;
+}
+.syntax--punctuation.syntax--definition.syntax--bold {
+  color: #f0c674;
+  font-weight: bold;
+}
+.syntax--punctuation.syntax--definition.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--punctuation.syntax--section.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--punctuation.syntax--section.syntax--method,
+.syntax--punctuation.syntax--section.syntax--class,
+.syntax--punctuation.syntax--section.syntax--inner-class {
+  color: #c5c8c6;
+}
+.syntax--support.syntax--class {
+  color: #f0c674;
+}
+.syntax--support.syntax--function {
+  color: #8abeb7;
+}
+.syntax--support.syntax--function.syntax--any-method {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--class,
+.syntax--entity.syntax--name.syntax--type.syntax--class {
+  color: #f0c674;
+}
+.syntax--entity.syntax--name.syntax--section {
+  color: #81a2be;
+}
+.syntax--entity.syntax--name.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--other.syntax--attribute-name {
+  color: #de935f;
+}
+.syntax--entity.syntax--other.syntax--attribute-name.syntax--id {
+  color: #81a2be;
+}
+.syntax--meta.syntax--class {
+  color: #f0c674;
+}
+.syntax--meta.syntax--class.syntax--body {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--link {
+  color: #de935f;
+}
+.syntax--meta.syntax--method-call,
+.syntax--meta.syntax--method {
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--require {
+  color: #81a2be;
+}
+.syntax--meta.syntax--selector {
+  color: #b294bb;
+}
+.syntax--meta.syntax--separator {
+  background-color: #373b41;
+  color: #c5c8c6;
+}
+.syntax--meta.syntax--tag {
+  color: #c5c8c6;
+}
+.syntax--none {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--heading .syntax--punctuation.syntax--definition.syntax--heading {
+  color: #81a2be;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--quote {
+  color: #de935f;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--source.syntax--gfm .syntax--markup {
+  -webkit-font-smoothing: auto;
+}
+.syntax--source.syntax--gfm .syntax--link .syntax--entity {
+  color: #8abeb7;
+}
+.syntax--source.syntax--cs .syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation.syntax--string {
+  color: #cc6666;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--constant.syntax--language.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--constant.syntax--language.syntax--json {
+  color: #8abeb7;
+}
+/*
+   This defines styling rules for syntax classes.
+
+   See the naming conventions for a list of syntax classes:
+   https://flight-manual.atom.io/hacking-atom/sections/syntax-naming-conventions
+
+   When styling rules conflict:
+   - The last rule overrides previous rules.
+   - The rule with most classes and pseudo-classes overrides the last rule.
+*/
+.syntax--keyword {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--storage {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--type {
+  color: #f0c674;
+}
+.syntax--keyword.syntax--operator {
+  color: #b294bb;
+}
+.syntax--keyword.syntax--function {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--variable {
+  color: #cc6666;
+}
+.syntax--keyword.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--support {
+  color: #cc6666;
+}
+.syntax--entity.syntax--decorator:last-child {
+  color: #81a2be;
+}
+.syntax--entity.syntax--label {
+  text-decoration: underline;
+}
+.syntax--entity.syntax--function {
+  color: #81a2be;
+}
+.syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--entity.syntax--operator {
+  color: #81a2be;
+}
+.syntax--entity.syntax--operator.syntax--symbolic {
+  color: #c5c8c6;
+}
+.syntax--entity.syntax--type {
+  color: #f0c674;
+}
+.syntax--entity.syntax--tag {
+  color: #cc6666;
+}
+.syntax--entity.syntax--attribute {
+  color: #de935f;
+}
+.syntax--punctuation {
+  color: #c5c8c6;
+}
+.syntax--punctuation.syntax--embedded {
+  color: #a3685a;
+}
+.syntax--string {
+  color: #b5bd68;
+}
+.syntax--string.syntax--immutable {
+  color: #b5bd68;
+}
+.syntax--string.syntax--part {
+  color: #8abeb7;
+}
+.syntax--string.syntax--interpolation {
+  color: #a3685a;
+}
+.syntax--string.syntax--regexp {
+  color: #b5bd68;
+}
+.syntax--string.syntax--regexp.syntax--language {
+  color: #b294bb;
+}
+.syntax--string.syntax--regexp.syntax--variable {
+  color: #81a2be;
+}
+.syntax--string.syntax--regexp.syntax--punctuation {
+  color: #a3685a;
+}
+.syntax--constant {
+  color: #de935f;
+}
+.syntax--constant.syntax--character {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #b5bd68;
+}
+.syntax--constant.syntax--character.syntax--code {
+  color: #8abeb7;
+}
+.syntax--text {
+  color: #c5c8c6;
+}
+.syntax--markup.syntax--heading {
+  color: #cc6666;
+}
+.syntax--markup.syntax--list.syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--bold {
+  color: #de935f;
+  font-weight: bold;
+}
+.syntax--markup.syntax--italic {
+  color: #b294bb;
+  font-style: italic;
+}
+.syntax--markup.syntax--raw {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--link {
+  color: #81a2be;
+}
+.syntax--markup.syntax--alt {
+  color: #8abeb7;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--inserted .syntax--punctuation {
+  color: #b5bd68;
+}
+.syntax--markup.syntax--deleted {
+  color: #cc6666;
+}
+.syntax--markup.syntax--deleted .syntax--punctuation {
+  color: #cc6666;
+}
+.syntax--markup.syntax--changed {
+  color: #b294bb;
+}
+.syntax--markup.syntax--changed .syntax--punctuation {
+  color: #b294bb;
+}
+.syntax--markup.syntax--commented {
+  color: #969896;
+}
+.syntax--markup.syntax--commented .syntax--punctuation {
+  color: #969896;
+}
+.syntax--comment {
+  color: #969896;
+}
+.syntax--comment.syntax--caption {
+  color: #9ea09e;
+  font-weight: bold;
+}
+.syntax--comment.syntax--term {
+  color: #a8aaa8;
+}
+.syntax--comment.syntax--punctuation {
+  color: #969896;
+  font-weight: normal;
+}
+.syntax--invalid:not(.syntax--punctuation).syntax--illegal {
+  background-color: #cc6666;
+  color: #1d1f21;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--function.syntax--support {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--tag {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--property {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--variable {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--entity.syntax--keyframe {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--constant {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--numeric {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--media {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--offset.syntax--unit {
+  color: #c5c8c6;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color {
+  color: #8abeb7;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--color.syntax--support {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--constant.syntax--attribute-value {
+  color: #b5bd68;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector {
+  color: #de935f;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--wildcard {
+  color: #cc6666;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--id {
+  color: #81a2be;
+}
+.syntax--source.syntax--css .syntax--punctuation.syntax--selector.syntax--attribute {
+  color: #c5c8c6;
+}
+
+/*
+ * Your Stylesheet
+ *
+ * This stylesheet is loaded when Atom starts up and is reloaded automatically
+ * when it is changed and saved.
+ *
+ * Add your own CSS or Less to fully customize Atom.
+ * If you are unfamiliar with Less, you can read more about it here:
+ * http://lesscss.org
+ */
+/*
+ * Examples
+ * (To see them, uncomment and save)
+ */
+</style>
+
+  </head>
+  <body>
+    <h1>Week 2 Ungraded Lab: Deploy a ML model with fastAPI and Docker</h1>
+<p>Welcome! During this ungraded lab you will deploy a webserver that hosts a predictive model trained on the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html#sklearn.datasets.load_wine">wine dataset</a> using <a href="https://fastapi.tiangolo.com/">FastApi</a> and <a href="https://www.docker.com/">Docker</a>.</p>
+<p>During Course 1 of this specialization you saw how to leverage FastAPI’s webserver functionalities to deploy a Deep Learning model that detected objects in pictures. In this lab you are going to build upon that experience and integrate your code with Docker so it is portable and can be deployed with more ease.</p>
+<p>Notice that in this lab you are going to use a simpler classifier that consists of a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">StandardScaler</a> and a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html">Random Forest</a> with a forest of 10 trees. This classifier is the same that you used on Course 3 during the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Permutation Feature Importance</code> lab. This is done to avoid using libraries such as Tensorflow that will yield much longer build times when building the Docker image due to their size.</p>
+<p>If you are a Windows user remember to use a WSL2 shell. To open such shell use the Windows search bar and type either <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">wsl</code> or <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">bash</code>, one of these should be available if you installed WSL2 previously.</p>
+<p>Open your terminal and let’s get started!</p>
+<hr>
+<h2>Why not use Tensorflow Serving?</h2>
+<p>Not all the models you will be working with are going to be written in Tensorflow, they might not even be Deep Learning models. TFS is a great option when working with Tensorflow but more often than not you will need the extra flexibility that comes with coding the webserver yourself.</p>
+<p>Along with this, it is a great learning experience to better understand how web servers integrate with classifiers to deploy ML algorithms.</p>
+<hr>
+<h2>How this lab works</h2>
+<p>By the end of this lab you will have built two versions of the webserver, one that can output only one prediction per request and another one that enables batching. During this you will learn about some of FastAPI’s features, how to create a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Dockerfile</code> and other key Docker concepts such as <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">image tagging</code>.</p>
+<p>The best way to follow along is to read this documentation from your browser while working on a cloned version of this repo on your local machine by using a terminal.</p>
+<p>Within the documentation, snippets of the files will be displayed with a description of what is going on. Notice that the same code can be found within the repo.</p>
+<p>To clone this repo use the following command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">git</span> clone https://github.com/https-deeplearning-ai/machine-learning-engineering-for-production-public.git</span></pre>
+<p>or for cloning via SSH use:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">git</span> clone git@github.com:https-deeplearning-ai/machine-learning-engineering-for-production-public.git</span></pre>
+<hr>
+<p>Let’s get started by jumping to the section <a href="#one-prediction-per-request">Part 1 - One prediction per request</a>!</p>
+<p>Or if you have already completed part 1 you can jump straight to <a href="#adding-batching-to-the-server">Part 2 - Adding batching to the server</a>!</p>
+<hr>
+<h2 id="one-prediction-per-request">One prediction per request</h2>
+<p>You can find all of the following code in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">no-batch/</code> directory. In your terminal <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd</code> to this directory to continue with the lab. If you are currently within the root of the repo you can use the command <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd course4/week2-ungraded-labs/C4_W2_Lab_1_FastAPI_Docker/no-batch/</code>.</p>
+<p>Notice that the server’s code must be in the file <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">main.py</code> within a directory called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">app</code>, following FastAPI’s guidelines.</p>
+<h3>Coding the server</h3>
+<p>Begin by importing the necessary dependencies. You will be using <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">pickle</code> for loading the pre-trained model saved in the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">app/wine.pkl</code> file, <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">numpy</code> for tensor manipulation, and the rest for developing the web server with <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">FastAPI</code>.</p>
+<p>Also, create an instance of the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">FastAPI</code> class. This instance will handle all of the functionalities for the server:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">import</span> pickle
+<span class="syntax--keyword syntax--control">import</span> numpy <span class="syntax--keyword syntax--control">as</span> np
+<span class="syntax--keyword syntax--control">from</span> fastapi <span class="syntax--keyword syntax--control">import</span> FastAPI
+<span class="syntax--keyword syntax--control">from</span> pydantic <span class="syntax--keyword syntax--control">import</span> BaseModel
+
+
+app <span class="syntax--keyword syntax--operator">=</span> <span class="syntax--support syntax--type syntax--contructor">FastAPI</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">title</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--string syntax--quoted">"Predicting Wine Class"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span></pre>
+<p>Now you need a way to represent a data point. You can do this by creating a class the subclasses from pydantic’s <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">BaseModel</code> and listing each attribute along with its corresponding type.</p>
+<p>In this case a data point represents a wine so this class is called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Wine</code> and all of the features of the model are of type <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">float</code>:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--comment syntax--line">
+# Represents a particular wine (or datapoint)</span>
+<span class="syntax--storage syntax--type syntax--class">class</span> <span class="syntax--entity syntax--name syntax--type syntax--class">Wine</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--entity syntax--other syntax--inherited-class">BaseModel</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>:
+    alcohol: <span class="syntax--support syntax--storage syntax--type">float</span>
+    malic_acid: <span class="syntax--support syntax--storage syntax--type">float</span>
+    ash: <span class="syntax--support syntax--storage syntax--type">float</span>
+    alcalinity_of_ash: <span class="syntax--support syntax--storage syntax--type">float</span>
+    magnesium: <span class="syntax--support syntax--storage syntax--type">float</span>
+    total_phenols: <span class="syntax--support syntax--storage syntax--type">float</span>
+    flavanoids: <span class="syntax--support syntax--storage syntax--type">float</span>
+    nonflavanoid_phenols: <span class="syntax--support syntax--storage syntax--type">float</span>
+    proanthocyanins: <span class="syntax--support syntax--storage syntax--type">float</span>
+    color_intensity: <span class="syntax--support syntax--storage syntax--type">float</span>
+    hue: <span class="syntax--support syntax--storage syntax--type">float</span>
+    od280_od315_of_diluted_wines: <span class="syntax--support syntax--storage syntax--type">float</span>
+    proline: <span class="syntax--support syntax--storage syntax--type">float</span></span></pre>
+<p>Now it is time to load the classifier into memory so it can be used for prediction. This can be done in the global scope of the script but here it is done inside a function to show you a cool feature of FastAPI.</p>
+<p>If you decorate a function with the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">@app.on_event("startup")</code> decorator you ensure that the function is run at the startup of the server. This gives you some flexibility if you need some custom logic to be triggered right when the server starts.</p>
+<p>The classifier is opened using a context manager and assigned to the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">clf</code> variable, which you still need to make global so other functions can access it:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--entity syntax--name syntax--function syntax--decorator">
+@app.<span class="syntax--entity syntax--name syntax--function">on_event</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--string syntax--quoted">"startup"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span>
+<span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">load_clf</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+    <span class="syntax--comment syntax--line"># Load classifier from pickle file</span>
+    <span class="syntax--keyword syntax--control">with</span> <span class="syntax--support syntax--function syntax--call">open</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--string syntax--quoted">"/app/wine.pkl"</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--string syntax--quoted">"rb"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span> <span class="syntax--keyword syntax--control">as</span> file:
+        <span class="syntax--storage syntax--modifier syntax--global">global</span> clf
+        clf <span class="syntax--keyword syntax--operator">=</span> pickle.<span class="syntax--entity syntax--name syntax--function">load</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>file<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span></pre>
+<p>Finally you need to create the function that will handle the prediction. This function will be run when you visit the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">/predict</code> endpoint of the server and it expects a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Wine</code> data point.</p>
+<p>This function is actually very straightforward, first you will convert the information within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Wine</code> object into a numpy array of shape <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">(1, 13)</code> and then use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">predict</code> method of the classifier to make a prediction for the data point. Notice that the prediction must be casted into a list using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">tolist</code> method.</p>
+<p>Finally return a dictionary (which FastAPI will convert into <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code>) containing the prediction.</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--entity syntax--name syntax--function syntax--decorator">
+@app.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--string syntax--quoted">"/predict"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span>
+<span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">wine</span>: <span class="syntax--support syntax--storage syntax--type">Wine</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+    data_point <span class="syntax--keyword syntax--operator">=</span> np.<span class="syntax--entity syntax--name syntax--function">array</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>
+        <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span>
+            <span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">alcohol</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">malic_acid</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">ash</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">alcalinity_of_ash</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">magnesium</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">total_phenols</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">flavanoids</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">nonflavanoid_phenols</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">proanthocyanins</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">color_intensity</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">hue</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">od280_od315_of_diluted_wines</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+                wine.<span class="syntax--variable syntax--other syntax--object syntax--property">proline</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span>
+            <span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span>
+        <span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span>
+    <span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+
+    pred <span class="syntax--keyword syntax--operator">=</span> clf.<span class="syntax--entity syntax--name syntax--function">predict</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>data_point<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>.<span class="syntax--entity syntax--name syntax--function">tolist</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+    pred <span class="syntax--keyword syntax--operator">=</span> pred<span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--constant syntax--numeric">0</span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span>
+    <span class="syntax--support syntax--function syntax--call">print</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>pred<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+    <span class="syntax--keyword syntax--control">return</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span><span class="syntax--string syntax--quoted">"Prediction"</span>: pred<span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span>
+</span></pre>
+<p>Now the server’s code is ready for inference, although you still need to spin it up. If you want to try it locally (given that you have the required dependencies installed) you can do so by using the command <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">uvicorn main:app --reload</code> while on the same directory as the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">main.py</code> file. <strong>However this is not required as you will be dockerizing this server next</strong>.</p>
+<h2>Dockerizing the server</h2>
+<p>Going forward all commands are run assuming you are currently within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">no-batch/</code> directory.</p>
+<p>Also you should create a directory called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">app</code> and place <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">main.py</code> (the server) and its dependencies (<code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">wine.pkl</code>) there as explained on the official FastAPI <a href="https://fastapi.tiangolo.com/deployment/docker/">docs</a> on how to deploy with Docker. This should result in a directory structure that looks like this:</p>
+<pre class="editor-colors lang-text" style="tab-size: 4;"><span class="syntax--text syntax--plain"><span class="syntax--meta syntax--paragraph syntax--text">..
+└── no-batch
+</span>    <span class="syntax--meta syntax--paragraph syntax--text">├── app/
+    │   ├── main.py (server code)
+    │   └── wine.pkl (serialized classifier)
+    ├── requirements.txt (Python dependencies)
+    ├── wine-examples/ (wine examples to test the server)
+    ├── README.md (this file)
+    └── Dockerfile</span></span></pre>
+<h2>Create the Dockerfile</h2>
+<p>The <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Dockerfile</code> is made up of all the instructions required to build your image. If this is the first time you see this kind of file it might look intimidating but you will see it is actually easier than it looks. First take a look at the whole file:</p>
+<h3>Base Image</h3>
+<pre class="editor-colors lang-Dockerfile" style="tab-size: 4;"><span class="syntax--source syntax--dockerfile"><span class="syntax--keyword syntax--control syntax--dockerfile">FROM</span> frolvlad/alpine-miniconda3:python3.7</span></pre>
+<p>The <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">FROM</code> instruction allows you to select a pre-existing image as the base for your new image. <strong>This means that all of the software available in the base image will also be available on your own.</strong> This is one of Docker’s nicest features since it allows for reusing images when needed.</p>
+<p>In this case your base image is <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">frolvlad/alpine-miniconda3:python3.7</code>, let’s break it down:</p>
+<ul>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">frolvlad</code> is the username of the author of the image.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">alpine-miniconda3</code> is its name.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">python3.7</code> is the image’s tag.</li>
+</ul>
+<p>This image contains an <a href="https://alpinelinux.org/">alpine</a> version of Linux, which is a distribution created to be very small in size. It also includes <a href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a> with Python 3. Notice that the tag let’s you know that the specific version of Python being used is 3.7. Tagging is great as it allows you to create different versions of similar images. In this case you could have this same image with a different version of Python such as 3.5.</p>
+<p>You could use many different base images such as the official <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">python:3.7</code> image. However if you compared the size you will encounter it is a lot heavier. In this case you will be using the one mentioned above as it is a great minimal image for the task at hand.</p>
+<h3>Installing dependencies</h3>
+<p>Now that you have an environment with Python installed it is time to install all of the Python packages that your server will depend on. First you need to copy your local <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">requirements.txt</code> file into the image so it can be accessed by other processes, this can be done via the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">COPY</code> instruction:</p>
+<pre class="editor-colors lang-Dockerfile" style="tab-size: 4;"><span class="syntax--source syntax--dockerfile"><span class="syntax--keyword syntax--control syntax--dockerfile">COPY </span>requirements.txt .</span></pre>
+<p>Now you can use <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">pip</code> to install these Python libraries. To run any command as you would on <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">bash</code>, use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">RUN</code> instruction:</p>
+<pre class="editor-colors lang-Dockerfile" style="tab-size: 4;"><span class="syntax--source syntax--dockerfile"><span class="syntax--keyword syntax--control syntax--dockerfile">RUN </span>pip install -r requirements.txt &amp;&amp; <span class="syntax--keyword syntax--control syntax--dockerfile">\</span>
+	rm requirements.txt</span></pre>
+<p>Notice that two commands were chained together using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">&amp;&amp;</code> operator. After you installed the libraries specified within <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">requirements.txt</code> you don’t have more use for that file so it is a good idea to delete it so the image includes only the necessary files for your server to run.</p>
+<p>This can be done using two <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">RUN</code> instructions, however, it is a good practice to chain together commands in this manner since Docker creates a new layer every time it encounters a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">RUN</code>, <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">COPY</code> or <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">ADD</code> instruction. This will result in a bigger image size. If you are interest in best practices for writing Dockerfiles be sure to check out this <a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/">resource</a>.</p>
+<h3>Exposing the port</h3>
+<p>Since you are coding a web server it is a good idea to leave some documentation about the port that the server is going to listen on. You can do this with the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">EXPOSE</code> instruction. In this case the server will listen to requests on port 80:</p>
+<pre class="editor-colors lang-Dockerfile" style="tab-size: 4;"><span class="syntax--source syntax--dockerfile"><span class="syntax--keyword syntax--control syntax--dockerfile">EXPOSE </span>80</span></pre>
+<h3>Copying your server into the image</h3>
+<p>Now you should put your code within the image. To do this you can simply use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">COPY</code> instruction to copy the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">app</code> directory within the root of the container:</p>
+<pre class="editor-colors lang-Dockerfile" style="tab-size: 4;"><span class="syntax--source syntax--dockerfile"><span class="syntax--keyword syntax--control syntax--dockerfile">COPY </span>./app /app</span></pre>
+<h3>Spinning up the server</h3>
+<p>Containers are usually meant to start and carry out a single task. This is why the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">CMD</code> instruction was created. This is the command that will be run once a container that uses this image is started. In this case it is the command that will spin up the server by specifying the host and port. Notice that the command is written in a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code> like format having each part of the command as a string within a list:</p>
+<pre class="editor-colors lang-Dockerfile" style="tab-size: 4;"><span class="syntax--source syntax--dockerfile"><span class="syntax--keyword syntax--control syntax--dockerfile">CMD </span>[<span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"uvicorn"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"app.main:app"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"--host"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"0.0.0.0"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"--port"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"80"</span>]</span></pre>
+<p>What is meant by <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code> like format is that Docker uses <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code> for its configurations and the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">CMD</code> instruction expects the commands as a list that follows <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code> conventions.</p>
+<h3>Putting it all together</h3>
+<p>The resulting <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Dockerfile</code> will look like this:</p>
+<pre class="editor-colors lang-Dockerfile" style="tab-size: 4;"><span class="syntax--source syntax--dockerfile"><span class="syntax--keyword syntax--control syntax--dockerfile">FROM</span> frolvlad/alpine-miniconda3:python3.7
+
+<span class="syntax--keyword syntax--control syntax--dockerfile">COPY </span>requirements.txt .
+
+<span class="syntax--keyword syntax--control syntax--dockerfile">RUN </span>pip install -r requirements.txt &amp;&amp; <span class="syntax--keyword syntax--control syntax--dockerfile">\</span>
+	rm requirements.txt
+
+<span class="syntax--keyword syntax--control syntax--dockerfile">EXPOSE </span>80
+
+<span class="syntax--keyword syntax--control syntax--dockerfile">COPY </span>./app /app
+
+<span class="syntax--keyword syntax--control syntax--dockerfile">CMD </span>[<span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"uvicorn"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"app.main:app"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"--host"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"0.0.0.0"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"--port"</span>, <span class="syntax--string syntax--quoted syntax--double syntax--dockerfile">"80"</span>]</span></pre>
+<p>Remember you can also look at it within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">no-batch</code> directory.</p>
+<h2>Build the image</h2>
+<p>Now that the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Dockerfile</code> is ready and you understand its contents, it is time to build the image. To do so, double check that you are within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">no-batch</code> directory and use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker build</code> command.</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> build <span class="syntax--entity syntax--other syntax--attribute-name">-t</span> mlepc4w2-ugl:no-batch .</span></pre>
+<p>You can use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-t</code> flag to specify the name of the image and its tag. As you saw earlier the tag comes after the colon so in this case the name is <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">mlepc4w2-ugl</code> and the tag is <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">no-batch</code>.</p>
+<p>After a couple of minutes your image should be ready to be used! If you want to see it along with any other images that you have on your local machine use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker images</code> command. This will display all of you images alongside their names, tags and size.</p>
+<h2>Run the container</h2>
+<p>Now that the image has been successfully built it is time to run a container out of it. You can do so by using the following command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> run <span class="syntax--entity syntax--other syntax--attribute-name">--rm</span> <span class="syntax--entity syntax--other syntax--attribute-name">-p</span> 80:80 mlepc4w2-ugl:no-batch</span></pre>
+<p>You should recognize this command from a previous ungraded lab. Let’s do a quick recap of the flags used:</p>
+<ul>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--rm</code>: Delete this container after stopping running it. This is to avoid having to manually delete the container. Deleting unused containers helps your system to stay clean and tidy.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-p 80:80</code>: This flags performs an operation knows as port mapping. The container, as well as your local machine, has its own set of ports. So you are able to access the port 80 within the container, you need to map it to a port on your computer. In this case it is mapped to the port 80 in your machine.</li>
+</ul>
+<p>At the end of the command is the name and tag of the image you want to run.</p>
+<p>After some seconds the container will start and spin up the server within. You should be able to see FastAPI’s logs being printed in the terminal.</p>
+<p>Now head over to <a href="http://localhost:80">localhost:80</a> and you should see a message about the server spinning up correctly.</p>
+<p><strong>Nice work!</strong></p>
+<h2>Make requests to the server</h2>
+<p>Now that the server is listening to requests on port 80, you can send <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">POST</code> requests to it for predicting classes of wine.</p>
+<p>Every request should contain the data that represents a wine in <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code> format like this:</p>
+<pre class="editor-colors lang-json" style="tab-size: 4;"><span class="syntax--meta syntax--structure syntax--dictionary syntax--json"><span class="syntax--punctuation syntax--definition syntax--dictionary syntax--begin">{</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>alcohol<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">12.6</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>malic_acid<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">1.34</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>ash<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">1.9</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>alcalinity_of_ash<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">18.5</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>magnesium<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">88.0</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>total_phenols<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">1.45</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>flavanoids<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">1.36</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>nonflavanoid_phenols<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">0.29</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>proanthocyanins<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">1.35</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>color_intensity<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">2.45</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>hue<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">1.04</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>od280_od315_of_diluted_wines<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">2.77</span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--pair">,</span>
+  <span class="syntax--string syntax--quoted syntax--double syntax--dictionary syntax--key syntax--json"><span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span>proline<span class="syntax--punctuation syntax--definition syntax--string syntax--json">"</span></span><span class="syntax--punctuation syntax--separator syntax--dictionary syntax--key-value">:</span><span class="syntax--constant syntax--numeric">562.0</span>
+<span class="syntax--punctuation syntax--definition syntax--dictionary syntax--end">}</span></span></pre>
+<p>This example represents a class 1 wine.</p>
+<p>Remember from Course 1 that FastAPI has a built-in client for you to interact with the server. You can use it by visiting <a href="http://localhost:80/docs">localhost:80/docs</a></p>
+<p>You can also use <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> and send the data directly with the request like this:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">curl</span> <span class="syntax--entity syntax--other syntax--attribute-name">-X</span> <span class="syntax--string">'POST'</span> http://localhost/predict \
+  <span class="syntax--entity syntax--other syntax--attribute-name">-H</span> <span class="syntax--string">'Content-Type: application/json'</span> \
+  <span class="syntax--entity syntax--other syntax--attribute-name">-d</span> <span class="syntax--string">'{
+  "alcohol":12.6,
+  "malic_acid":1.34,
+  "ash":1.9,
+  "alcalinity_of_ash":18.5,
+  "magnesium":88.0,
+  "total_phenols":1.45,
+  "flavanoids":1.36,
+  "nonflavanoid_phenols":0.29,
+  "proanthocyanins":1.35,
+  "color_intensity":2.45,
+  "hue":1.04,
+  "od280_od315_of_diluted_wines":2.77,
+  "proline":562.0
+}'</span></span></pre>
+<p>Or you can use a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code> file to avoid typing a long command like this:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">curl</span> <span class="syntax--entity syntax--other syntax--attribute-name">-X</span> POST http://localhost:80/predict \
+    <span class="syntax--entity syntax--other syntax--attribute-name">-d</span> @./wine-examples/1.json \
+    <span class="syntax--entity syntax--other syntax--attribute-name">-H</span> <span class="syntax--string">"Content-Type: application/json"</span></span></pre>
+<p>Let’s understand the flags used:</p>
+<ul>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-X</code>: Allows you to specify the request type. In this case it is a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">POST</code> request.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-d</code>: Stands for <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">data</code> and allows you to attach data to the request. And the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">@</code> at symbol is a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> specific requirement as discussed <a href="https://unix.stackexchange.com/a/144483">here</a>.</li>
+<li><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">-H</code>: Stands for <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Headers</code> and it allows you to pass additional information through the request. In this case it is used to the tell the server that the data is sent in a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">JSON</code> format.</li>
+</ul>
+<p>There is a directory called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">wine-examples</code> that includes three files, one for each class of wine. Use those to try out the server and also pass in some random values to see what you get!</p>
+<hr>
+<p><strong>Congratulations on finishing part 1 of this ungraded lab!</strong></p>
+<p>During this lab you saw how to code a webserver using FastAPI and how to Dockerize it. You also learned how <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Dockerfiles</code>, <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">images</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">containers</code> are related to each other and how to use <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> to make <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">POST</code> requests to get predictions from servers.</p>
+<p>In the next part you will modify the server to accept batches of data instead of a single data point per request.</p>
+<p>Jump to <a href="#adding-batching-to-the-server">Part 2 - Adding batching to the server</a></p>
+<hr>
+<h2 id="adding-batching-to-the-server">Adding batching to the server</h2>
+<p>Now that you saw how to code a webserver that serves a model for inference it is time to implement some code that allows for getting predictions in batch. This is very important because right now your server can only handle one prediction per request and you are losing this feature that most machine learning predictors have been optimized to perform.</p>
+<p>Begin the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd</code>ing into the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">with-batch</code> directory. If you are currently within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">no-batch</code> directory you can use the command <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">cd ../with-batch</code>.</p>
+<h2>Update the server</h2>
+<p>Remember that this code can be find within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">app/main.py</code> file.</p>
+<p>First of all you will need two extra imports to handle prediction by batches. Both are related to handling list-like data. These are <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">List</code> from <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">typing</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">conlist</code> from <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">pydantic</code>. Remember that <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">REST</code> does not support objects like numpy arrays so you need to serialize this kind of data into lists. The imports will now look like this:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--keyword syntax--control">import</span> pickle
+<span class="syntax--keyword syntax--control">import</span> numpy <span class="syntax--keyword syntax--control">as</span> np
+<span class="syntax--keyword syntax--control">from</span> typing <span class="syntax--keyword syntax--control">import</span> List
+<span class="syntax--keyword syntax--control">from</span> fastapi <span class="syntax--keyword syntax--control">import</span> FastAPI
+<span class="syntax--keyword syntax--control">from</span> pydantic <span class="syntax--keyword syntax--control">import</span> BaseModel<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> conlist</span></pre>
+<p>Now you will modify the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">Wine</code> class. It used to represent a wine but now it will represent a batch of wines. To accomplish this you can set the attribute <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">batches</code> and specify that it will be of type <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">List</code> of <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">conlist</code>s. Since FastAPI enforces types of objects you need to explicitly specify them. In this case you know that the batch will be a list of arbitrary size but you also need to specify the type of the elements within that list. You could do a List of Lists of floats but there is a better alternative, using pydantic’s conlist. The “con” prefix stands for <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">constrained</code>, so this is a constrained list. This type allows you to select the type of the items within the list and also the maximum and minimum number of items. In this case your model was trained using 13 features so each data point should be of size 13:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--comment syntax--line"># Represents a batch of wines</span>
+<span class="syntax--storage syntax--type syntax--class">class</span> <span class="syntax--entity syntax--name syntax--type syntax--class">Wine</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--entity syntax--other syntax--inherited-class">BaseModel</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>:
+    batches: List<span class="syntax--punctuation syntax--definition syntax--begin syntax--bracket syntax--square">[</span><span class="syntax--entity syntax--name syntax--function syntax--call">conlist</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">item_type</span><span class="syntax--keyword syntax--operator">=</span>float<span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">min_items</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--constant syntax--numeric">13</span><span class="syntax--punctuation syntax--separator syntax--delimiter">,</span> <span class="syntax--variable syntax--parameter syntax--function">max_items</span><span class="syntax--keyword syntax--operator">=</span><span class="syntax--constant syntax--numeric">13</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span><span class="syntax--punctuation syntax--definition syntax--end syntax--bracket syntax--square">]</span></span></pre>
+<p>Notice that you are not explicitly naming each feature so in this case the <strong>order of the data matters</strong>.</p>
+<p>Finally you will update the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">predict</code> endpoint since loading the classifier is the same as in the case without batching.</p>
+<p>Since scikit-learn accepts batches of data represented by numpy arrays you can simply get the batches from the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">wine</code> object, which are lists, and convert it to numpy arrays before feeding it to the classifier. Once again you need to convert the predictions to a list to make them REST-compatible:</p>
+<pre class="editor-colors lang-python" style="tab-size: 4;"><span class="syntax--source syntax--python"><span class="syntax--entity syntax--name syntax--function syntax--decorator">@app.<span class="syntax--entity syntax--name syntax--function">post</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--string syntax--quoted">"/predict"</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span></span>
+<span class="syntax--storage syntax--type syntax--function">def</span> <span class="syntax--entity syntax--name syntax--function syntax--definition">predict</span><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--variable syntax--parameter syntax--function">wine</span>: <span class="syntax--support syntax--storage syntax--type">Wine</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span>:
+    batches <span class="syntax--keyword syntax--operator">=</span> wine.<span class="syntax--variable syntax--other syntax--object syntax--property">batches</span>
+    np_batches <span class="syntax--keyword syntax--operator">=</span> np.<span class="syntax--entity syntax--name syntax--function">array</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>batches<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+    pred <span class="syntax--keyword syntax--operator">=</span> clf.<span class="syntax--entity syntax--name syntax--function">predict</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span>np_batches<span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>.<span class="syntax--entity syntax--name syntax--function">tolist</span><span class="syntax--meta syntax--method-call syntax--python"><span class="syntax--punctuation syntax--section syntax--parens syntax--begin syntax--bracket syntax--round">(</span><span class="syntax--punctuation syntax--section syntax--parens syntax--end syntax--bracket syntax--round">)</span></span>
+    <span class="syntax--keyword syntax--control">return</span> <span class="syntax--punctuation syntax--section syntax--block syntax--begin syntax--bracket syntax--curly">{</span><span class="syntax--string syntax--quoted">"Prediction"</span>: pred<span class="syntax--punctuation syntax--section syntax--block syntax--end syntax--bracket syntax--curly">}</span></span></pre>
+<p>With these minor changes your server is now ready to accept batches of data! Pretty cool!</p>
+<h2>Building a new version of the image</h2>
+<p>The Dockerfile for this new version of the server is identical to the previous one. The only changes were done within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">main.py</code> file so the Dockerfile remains the same.</p>
+<p>Now, while on the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">with-batch</code> directory run the docker build command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> build <span class="syntax--entity syntax--other syntax--attribute-name">-t</span> mlepc4w2-ugl:with-batch . </span></pre>
+<p>Since the initial layers are identical to the ones of the previous image, the build process should be fairly quick. This is another great feature of Docker called <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">layer caching</code>, which caches layers for newer builds to yield lower build times.</p>
+<p>Notice that the image name stays the same, but the tag changed to specify that this version of the server supports batching.</p>
+<h2>Cleaning things up</h2>
+<p>To check out the two images you have created you can use the following command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> images</span></pre>
+<p>Sometimes when checking all of your available images you will stumble upon some images with names and tags that have the value of <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">none</code>. These are intermediate images and if you see them listed when using the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker images</code> command it is usually a good practice to prune them.</p>
+<p>Another way to check if you have these images in your system is to run this command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">$(<span class="syntax--entity syntax--name syntax--function">docker</span> images <span class="syntax--entity syntax--other syntax--attribute-name">--filter</span> <span class="syntax--string">"dangling=true"</span> <span class="syntax--entity syntax--other syntax--attribute-name">-q</span> <span class="syntax--entity syntax--other syntax--attribute-name">--no-trunc</span>)</span></span></pre>
+<p>If there is no output it means there where no such images. In case there were some you can prune them by running the following command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> rmi $(<span class="syntax--entity syntax--name syntax--function">docker</span> images <span class="syntax--entity syntax--other syntax--attribute-name">--filter</span> <span class="syntax--string">"dangling=true"</span> <span class="syntax--entity syntax--other syntax--attribute-name">-q</span> <span class="syntax--entity syntax--other syntax--attribute-name">--no-trunc</span>)</span></pre>
+<p>Now if you run again the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker images</code> command you should not see those intermediate images. Things are much cleaner now!</p>
+<h2>Running the server</h2>
+<p>Now you can run a container out of the image using the following command:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">docker</span> run <span class="syntax--entity syntax--other syntax--attribute-name">--rm</span> <span class="syntax--entity syntax--other syntax--attribute-name">-p</span> 81:80 mlepc4w2-ugl:with-batch </span></pre>
+<p>Notice that this time, port 80 within the container maps to port 81 in your local host. This is because you probably haven’t stopped the server from part 1 of this lab which is still running on port 80. It also serves to showcase how port mapping can be use to map from any port in the container to any port in the host.</p>
+<p>Now head over to <a href="http://localhost:81">localhost:81</a> and you should see a message about the server spinning up correctly.</p>
+<h2>Make requests to the server</h2>
+<p>Once again it is time to test your server by actually using it for prediction. In the same manner as before there are some examples of batches of data within the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">wine-examples</code> directory.</p>
+<p>To get the predictions for a batch of 32 wines (found in the batch_1.json file) you can send a <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">POST</code> request to the server using <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">curl</code> like this:</p>
+<pre class="editor-colors lang-bash" style="tab-size: 4;"><span class="syntax--source syntax--shell"><span class="syntax--entity syntax--name syntax--function">curl</span> <span class="syntax--entity syntax--other syntax--attribute-name">-X</span> POST http://localhost:81/predict \
+    <span class="syntax--entity syntax--other syntax--attribute-name">-d</span> @./wine-examples/batch_1.json \
+    <span class="syntax--entity syntax--other syntax--attribute-name">-H</span> <span class="syntax--string">"Content-Type: application/json"</span></span></pre>
+<p>Now you should see a list with the 32 predictions (in order) for each one of the data points within the batch. <strong>Nice work!</strong></p>
+<h2>Stopping the servers</h2>
+<p>To step to servers and the containers they are running in, simply use the key combination <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">ctrl + c</code> in the terminal window where you started the process.</p>
+<p>Alternatively you can use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker ps</code> command to check the name of the running containers and use the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">docker stop name_of_container</code> command to stop them. Remember that you used the <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">--rm</code> flag so once you stop these containers they will also be deleted.</p>
+<p><strong>Do not delete the images you created since they will be used in an upcoming lab!</strong></p>
+<hr>
+<p><strong>Congratulations on finishing this ungraded lab!</strong></p>
+<p>Now you should have a better understanding of how web servers can be used to host your machine learning models. You saw how you can use a library such as FastAPI to code the server and use Docker to ship your server along with your model in an easy manner. You also learned about some key concepts of Docker such as <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">image tagging</code> and <code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace, &quot;WenQuanYi Micro Hei&quot;;">port mapping</code> and how  to allow for batching in the requests. In general you should have a clearer idea of how all these technologies interact to host models in production.</p>
+<p><strong>Keep it up!</strong></p>
+
+  </body>
+</html>
